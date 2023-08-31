@@ -7,7 +7,7 @@ module.exports.index = async (req, res) => { // Do nó sẽ nối route từ bê
         status: "active",
         deleted: false
     });
-    // Truyền vào file là 1 object các sản phẩm muốn tìm
+    // Truyền vào find là 1 object các sản phẩm muốn tìm
 
     const newProducts = products.map(item => {
         item.priceNew = (item.price * (100 - item.discountPercentage) / 100).toFixed(0); // Thêm 1 key cho object
@@ -17,5 +17,5 @@ module.exports.index = async (req, res) => { // Do nó sẽ nối route từ bê
     res.render('client/pages/products/index.pug', {
         pageTitle: "Trang danh sách sản phẩm",
         products: newProducts
-    }); // mac dinh o trang index.js tro tu thu muc view
+    }); // mặc định ở trang index.js trỏ từ thư mục view
 }
