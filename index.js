@@ -12,6 +12,12 @@ const route = require('./routes/client/index.route'); // giữ phím ctrl + clic
 const app = express();
 const port = parseInt(process.env.PORT) || 3000
 
+//Nhúng systemConfig 
+const systemConfig = require('./config/system.js');
+
+//App locals Variables
+app.locals.prefixAdmin = systemConfig.prefixAdmin;
+
 //Dùng pug
 app.set('views', './views');
 app.set('view engine', 'pug');
