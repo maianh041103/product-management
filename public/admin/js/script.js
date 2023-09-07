@@ -1,5 +1,5 @@
+//Filter
 const buttonStatus = document.querySelectorAll("[button-status]");
-
 if (buttonStatus.length > 0) {
 
     buttonStatus.forEach(item => {
@@ -18,7 +18,9 @@ if (buttonStatus.length > 0) {
         })
     })
 }
+//End Filter
 
+//Search
 const formSearch = document.querySelector("#form-search");
 if (formSearch) {
     let url = new URL(window.location.href);
@@ -33,3 +35,18 @@ if (formSearch) {
         window.location.href = url;
     })
 }
+//End Search
+
+//Pagination
+const buttonPagination = document.querySelectorAll("[button-pagination]");
+buttonPagination.forEach(button => {
+    button.addEventListener("click", () => {
+        const page = button.getAttribute("button-pagination");
+        let url = new URL(location.href);
+        if (page) {
+            url.searchParams.set("page", page);
+        }
+        location.href = url.href;
+    })
+})
+//End Pagination
