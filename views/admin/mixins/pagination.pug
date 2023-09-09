@@ -8,12 +8,13 @@ mixin pagination(pagination)
                     button-pagination= parseInt(pagination.currentPage) - 1
                     ) Trang trước
 
-            -for(let i=1;i<=pagination.totalPage;i++)
-                li(class="page-item")
-                button(
-                    class=`page-link ${(pagination.currentPage==i)?"active":""}`
-                    button-pagination= i
-                ) #{i}
+            -for(let i=pagination.currentPage-1;i<=pagination.currentPage+1;i++)
+                if(i>=1 && i<=pagination.totalPage)
+                    li(class="page-item")
+                    button(
+                        class=`page-link ${(pagination.currentPage==i)?"active":""}`
+                        button-pagination= i
+                    ) #{i}
 
             if(pagination.currentPage < pagination.totalPage)
                 li(class="page-item")
