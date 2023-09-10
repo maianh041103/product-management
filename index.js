@@ -1,4 +1,5 @@
 const express = require('express');
+var methodOverride = require('method-override');
 require("dotenv").config();
 
 //Connect database
@@ -11,6 +12,9 @@ const route = require('./routes/client/index.route'); // giữ phím ctrl + clic
 
 const app = express();
 const port = parseInt(process.env.PORT) || 3000
+
+//Nhúng methodOverride
+app.use(methodOverride('_method'))
 
 //Nhúng systemConfig 
 const systemConfig = require('./config/system.js');

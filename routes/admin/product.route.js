@@ -5,4 +5,6 @@ const route = express.Router();
 
 route.get('/', controller.index);
 
+route.patch('/change-status/:status/:id', controller.changeStatus);
+
 module.exports = route
