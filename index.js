@@ -1,5 +1,6 @@
 const express = require('express');
 var methodOverride = require('method-override');
+const bodyParser = require('body-parser');
 require("dotenv").config();
 
 //Connect database
@@ -15,6 +16,9 @@ const port = parseInt(process.env.PORT) || 3000
 
 //Nhúng methodOverride
 app.use(methodOverride('_method'))
+
+//Nhúng body-parser
+app.use(bodyParser.urlencoded({ extended: false }));
 
 //Nhúng systemConfig 
 const systemConfig = require('./config/system.js');
