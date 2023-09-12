@@ -8,7 +8,8 @@ module.exports.index = async (req, res) => { // Do nó sẽ nối route từ bê
     const products = await Product.find({
         status: "active",
         deleted: false
-    });
+    }).sort({ position: "desc" })
+        ;
     // Truyền vào find là 1 object các sản phẩm muốn tìm
 
     const newProducts = products.map(item => {

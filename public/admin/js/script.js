@@ -89,16 +89,24 @@ if (checkboxMulti) {
     formChangeMulti.addEventListener("submit", (e) => {
         e.preventDefault();
         let ids = [];
+
         const countChecked = checkboxMulti.querySelectorAll("input[name='id']:checked").length;
+
+        const typeChange = e.target.elements.type.value;
 
         if (countChecked > 0) {
             inputsId.forEach(button => {
                 if (button.checked) {
-                    ids.push(button.value);
+                    if (typeChange == "change-position") {
+                        const position = button.closest("tr").querySelector("input[name='position']").value;
+                        ids.push(`${button.value}-${position}`);
+                    }
+                    else {
+                        ids.push(button.value);
+                    }
                 }
             })
 
-            const typeChange = e.target.elements.type.value;
 
             if (typeChange == "delete-all") {
                 const isConfirm = confirm(`Bạn có chắc chắn muốn xóa ${countChecked} sản phẩm?`);

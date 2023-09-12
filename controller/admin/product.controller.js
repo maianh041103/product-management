@@ -33,7 +33,10 @@ module.exports.index = async (req, res) => {
     objectPagination = paginationHelper(objectPagination, req.query, countProducts);
     //End pagination
 
-    const products = await Product.find(find).limit(objectPagination.limitItems).skip(objectPagination.skip);
+    const products = await Product.find(find)
+        .sort({ position: "desc" })
+        .limit(objectPagination.limitItems)
+        .skip(objectPagination.skip);
 
     res.render('admin/pages/products/index.pug', {
         pageTitle: "Danh sách sản phẩm",
@@ -70,6 +73,12 @@ module.exports.changeMulti = async (req, res) => {
                 deleted: "true",
                 deleteAt: new Date()
             });
+        case "change-position":
+            for (const item of ids) {
+                [id, position] = item.split('-');
+                position = parseInt(position);
+                await Product.updateOne({ _id: id }, { position: position });
+            }
     }
     res.redirect('back');
 }
