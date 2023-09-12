@@ -1,6 +1,10 @@
 const express = require('express');
-var methodOverride = require('method-override');
+const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const flash = require('express-flash');
+
 require("dotenv").config();
 
 //Connect database
@@ -13,6 +17,11 @@ const route = require('./routes/client/index.route'); // giữ phím ctrl + clic
 
 const app = express();
 const port = parseInt(process.env.PORT) || 3000
+
+//Nhúng flash : Dùng để hiện thị thông báo
+app.use(cookieParser('maianh20'));
+app.use(session({ cookie: { maxAge: 60000 } }));
+app.use(flash());
 
 //Nhúng methodOverride
 app.use(methodOverride('_method'))
