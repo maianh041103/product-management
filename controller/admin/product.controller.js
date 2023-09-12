@@ -1,9 +1,9 @@
-//[GET] /admin/product
 const Product = require('../../models/product.model');
 const filterStatusHelper = require('../../helpers/filterStatus');
 const searchHelper = require('../../helpers/search');
 const paginationHelper = require('../../helpers/pagination');
 
+//[GET] /admin/product
 module.exports.index = async (req, res) => {
 
     const filterStatus = filterStatusHelper(req.query);
@@ -43,6 +43,7 @@ module.exports.index = async (req, res) => {
         pagination: objectPagination
     })
 }
+
 // [PATCH] /admin/products/change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
     const status = req.params.status;
@@ -50,6 +51,7 @@ module.exports.changeStatus = async (req, res) => {
     await Product.updateOne({ _id: id }, { status: status });
     res.redirect('back');
 }
+
 // [PATCH] /admin/products/change-multi
 module.exports.changeMulti = async (req, res) => {
     // req.body : tra ve object do form tra ve
@@ -64,5 +66,12 @@ module.exports.changeMulti = async (req, res) => {
             await Product.updateMany({ _id: { $in: ids } }, { status: "inactive" });
             break;
     }
+    res.redirect('back');
+}
+
+//[DELETE] /admin/products/delete-item/:id
+module.exports.deleteItem = async (req, res) => {
+    const id = req.params.id;
+    await Product.deleteOne({ _id: id });
     res.redirect('back');
 }
