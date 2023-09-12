@@ -65,21 +65,27 @@ module.exports.changeMulti = async (req, res) => {
     switch (type) {
         case "active":
             await Product.updateMany({ _id: { $in: ids } }, { status: "active" });
+            req.flash("success", "Bạn đã chuyển trạng thái active thành công");
             break;
         case "inactive":
             await Product.updateMany({ _id: { $in: ids } }, { status: "inactive" });
+            req.flash("success", "Bạn đã chuyển trạng thái inactive thành công");
             break;
         case "delete-all":
             await Product.updateMany({ _id: { $in: ids } }, {
                 deleted: "true",
                 deleteAt: new Date()
             });
+            req.flash("success", "Bạn đã xóa thành công");
+            break;
         case "change-position":
             for (const item of ids) {
                 [id, position] = item.split('-');
                 position = parseInt(position);
                 await Product.updateOne({ _id: id }, { position: position });
             }
+            req.flash("success", "Bạn đã thay đổi thứ tự thành công");
+            break;
     }
     res.redirect('back');
 }
