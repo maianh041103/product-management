@@ -85,6 +85,7 @@ if (checkboxMulti) {
 
     //Form 
     const formChangeMulti = document.querySelector("[form-change-multi]");
+
     formChangeMulti.addEventListener("submit", (e) => {
         e.preventDefault();
         let ids = [];
@@ -96,6 +97,15 @@ if (checkboxMulti) {
                     ids.push(button.value);
                 }
             })
+
+            const typeChange = e.target.elements.type.value;
+
+            if (typeChange == "delete-all") {
+                const isConfirm = confirm(`Bạn có chắc chắn muốn xóa ${countChecked} sản phẩm?`);
+                if (!isConfirm) {
+                    return;
+                }
+            }
 
             const inputText = document.querySelector("input[name='ids']");
             inputText.value = ids.join(", ");
