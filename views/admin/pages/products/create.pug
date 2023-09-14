@@ -1,0 +1,116 @@
+extends ../../layouts/default.pug
+
+block main 
+    h1(class="mb-4") Thêm mới sản phẩm
+
+    form(
+        action=`${prefixAdmin}/products/create`
+        id="from-create-product"
+        method="POST"
+    )
+        div(class='form-group')
+            label(for="title") Tiêu đề
+            input(
+                type="text"
+                name="title"
+                id="title"
+                class='form-control'
+                required 
+            )
+
+        div(class='form-group')
+            label(for='desc') Mô tả
+            textarea(
+                name="description"
+                id="desc"
+                cols="30"
+                rows="5"
+                class='form-control'
+        ) 
+
+        div(class='form-group')
+            label(for='price') Giá
+            input(
+                type='number'
+                id='price'
+                name='price'
+                class='form-control'
+                min=0
+                value=0
+            )
+
+        div(class='form-group')
+            label(for='discount') % Giảm giá
+            input(
+                type='number'
+                id='discount'
+                name='discountPercentage'
+                class='form-control'
+                min=0
+                value=0
+            )
+        
+        div(class='form-group')
+            label(for='stock') Số lượng
+            input(
+                type='number'
+                id='stock'
+                name='stock'
+                class='form-control'
+                min=0
+                value=0
+            )
+        
+        div(class='form-group')
+            label(for='thumbnail') Ảnh
+            input(
+                type='text'
+                id='thumbnail'
+                name='thumbnail'
+                class='form-control'
+            )
+
+        div(class='form-group')
+            label(for='position') Vị trí
+            input(
+                type='number'
+                id='position'
+                name='position'
+                class='form-control'
+                min=0
+                placeholder='Tự động tăng'
+            )
+        
+        div(class="form-group form-check form-check-inline")
+            input(
+                type='radio'
+                name="status"
+                id="statusActive"
+                value="active"
+                class="form-check-input"
+                checked
+            )
+            label(
+                for="statusActive" class="form-check-label"
+            ) Hoạt động
+        
+        div(class="form-group form-check form-check-inline")
+            input(
+                type='radio'
+                name="status"
+                id="statusInActive"
+                value="inactive"
+                class="form-check-input"
+            )
+            label(
+                for="statusInActive" class="form-check-label"
+            ) Dừng Hoạt động
+
+        div(class="from-group")
+            button(
+                type="submit"
+                class="btn btn-primary"
+            ) Tạo mới
+        
+
+            

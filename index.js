@@ -26,7 +26,7 @@ app.use(flash());
 //Nhúng methodOverride
 app.use(methodOverride('_method'))
 
-//Nhúng body-parser
+//Nhúng body-parser : Nhung truoc route
 app.use(bodyParser.urlencoded({ extended: false }));
 
 //Nhúng systemConfig 
