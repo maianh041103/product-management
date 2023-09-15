@@ -121,6 +121,7 @@ module.exports.ceatePOST = async (req, res) => {
     else {
         req.body.position = parseInt(req.body.position);
     }
+    req.body.thumbnail = `/uploads/${req.file.filename}`;
 
     //create 1 bản ghi vào mongoose 
     const product = new Product(req.body);
