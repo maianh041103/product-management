@@ -1,0 +1,137 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main 
+    +alert-error(5000)
+    +alert-success(5000)
+    h1(class="mb-4") Sửa thông tin sản phẩm
+
+    form(
+        action=`${prefixAdmin}/products/edit/${product._id}?_method=PATCH`
+        id="from-edit-product"
+        method="POST"
+        enctype="multipart/form-data"
+    )
+        div(class='form-group')
+            label(for="title") Tiêu đề
+            input(
+                type="text"
+                name="title"
+                id="title"
+                class='form-control'
+                value=product.title
+                required 
+            )
+
+        div(class='form-group')
+            label(for='desc') Mô tả
+            textarea(
+                name="description"
+                id="desc"
+                cols="30"
+                rows="5"
+                class='form-control'
+            ) #{product.description} 
+
+        div(class='form-group')
+            label(for='price') Giá
+            input(
+                type='number'
+                id='price'
+                name='price'
+                class='form-control'
+                min=0
+                value=product.price
+            ) 
+
+        div(class='form-group')
+            label(for='discount') % Giảm giá
+            input(
+                type='number'
+                id='discount'
+                name='discountPercentage'
+                class='form-control'
+                min=0
+                value=product.discountPercentage
+            )
+        
+        div(class='form-group')
+            label(for='stock') Số lượng
+            input(
+                type='number'
+                id='stock'
+                name='stock'
+                class='form-control'
+                min=0
+                value=product.stock
+            )
+        
+        div(
+            class="form-group"
+            upload-image
+        )
+            label(for="thumbnail") Ảnh
+            input(
+                type="file"
+                class="form-control-file"
+                id="thumbnail"
+                name="thumbnail"
+                accept="image/*"
+                upload-image-input
+            )
+            img(
+                src=product.thumbnail
+                upload-image-preview
+                class="image-preview"
+            )
+            button(
+                delete-image
+                class="btn btn-danger"
+            ) x
+            
+        div(class='form-group')
+            label(for='position') Vị trí
+            input(
+                type='number'
+                id='position'
+                name='position'
+                class='form-control'
+                min=0
+                value=product.position
+                placeholder='Tự động tăng'
+            )
+        
+        div(class="form-group form-check form-check-inline")
+            input(
+                type='radio'
+                name="status"
+                id="statusActive"
+                value="active"
+                class="form-check-input"
+                checked = product.status=="active"?true:false
+            )
+            label(
+                for="statusActive" class="form-check-label"
+            ) Hoạt động
+        
+        div(class="form-group form-check form-check-inline")
+            input(
+                type='radio'
+                name="status"
+                id="statusInActive"
+                value="inactive"
+                class="form-check-input"
+                checked = product.status=="inactive"?true:false
+            )
+            label(
+                for="statusInActive" class="form-check-label"
+            ) Dừng Hoạt động
+
+        div(class="from-group")
+            button(
+                type="submit"
+                class="btn btn-primary"
+            ) Sửa
+        
+
+            

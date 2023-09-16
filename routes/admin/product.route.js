@@ -19,4 +19,8 @@ route.get('/create', controller.ceate);
 
 route.post('/create', upload.single('thumbnail'), validate.createPost, controller.ceatePOST);
 
+route.get('/edit/:id', controller.edit);
+
+route.patch('/edit/:id', upload.single('thumbnail'), validate.createPost, controller.editPATCH);
+
 module.exports = route

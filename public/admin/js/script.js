@@ -172,6 +172,7 @@ if (uploadImage) {
     const buttonDeleteImage = document.querySelector('[delete-image]');
     if (buttonDeleteImage) {
         buttonDeleteImage.addEventListener("click", (e) => {
+            e.preventDefault();
             uploadImageInput.value = "";
             uploadImagePreview.src = "";
         })
