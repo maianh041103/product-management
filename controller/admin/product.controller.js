@@ -115,6 +115,7 @@ module.exports.ceatePOST = async (req, res) => {
     req.body.price = parseInt(req.body.price);
     req.body.discountPercentage = parseInt(req.body.discountPercentage);
     req.body.stock = parseInt(req.body.stock);
+
     if (req.body.position == '') {
         req.body.position = await Product.count() + 1;
     }
@@ -172,4 +173,24 @@ module.exports.editPATCH = async (req, res, next) => {
         req.flash("error", "Cập nhật sản phẩm thất bại");
     }
     res.redirect('back');
+}
+
+//[GET] /admin/products/detail
+module.exports.detail = async (req, res) => {
+    try {
+        const find = {
+            _id: req.params.id,
+            deleted: false
+        }
+        const product = await Product.findOne(find);
+
+        res.render('admin/pages/products/detail.pug', {
+            pageTitle: "Chi tiết sản phẩm",
+            product: product
+        });
+
+    } catch (error) {
+        req.flash("error", "Lấy thông tin hiển thị chi tiết sản phẩm thất bại");
+        res.redirect(`${systemConfig.prefixAdmin}/products`);
+    }
 }
