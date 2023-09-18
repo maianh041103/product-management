@@ -22,3 +22,22 @@ module.exports.index = async (req, res) => { // Do nó sẽ nối route từ bê
         products: newProducts
     }); // mặc định ở trang index.js trỏ từ thư mục view
 }
+
+module.exports.detail = async (req, res) => {
+    try {
+        const find = {
+            deleted: false,
+            status: "active",
+            slug: req.params.slug
+        }
+
+        const product = await Product.findOne(find);
+
+        res.render('client/pages/products/detail.pug', {
+            pageTitle: product.title,
+            product: product
+        });
+    } catch (error) {
+        res.redirect(`/products`);
+    }
+}
