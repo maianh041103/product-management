@@ -36,11 +36,11 @@ const systemConfig = require('./config/system.js');
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
 //Dùng pug
-app.set('views', './views');
+app.set('views', `${__dirname}/views`);
 app.set('view engine', 'pug');
 
 //Nhúng file tĩnh
-app.use(express.static('public'));
+app.use(express.static(`${__dirname}/public`));
 
 //Route
 route(app);
