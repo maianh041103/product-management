@@ -34,8 +34,20 @@ module.exports.index = async (req, res) => {
     objectPagination = paginationHelper(objectPagination, req.query, countProducts);
     //End pagination
 
+    //Sort
+    const sortKey = req.query.sortKey;
+    const sortValue = req.query.sortValue;
+    const sort = {};
+    if (sortKey && sortValue) {
+        sort[sortKey] = sortValue;
+    }
+    else {
+        sort['position'] = 'desc';
+    }
+    //End Sort
+
     const products = await Product.find(find)
-        .sort({ position: "desc" })
+        .sort(sort)
         .limit(objectPagination.limitItems)
         .skip(objectPagination.skip);
 
@@ -122,8 +134,6 @@ module.exports.ceatePOST = async (req, res) => {
     else {
         req.body.position = parseInt(req.body.position);
     }
-
-    console.log(req.body);
 
     //create 1 bản ghi vào mongoose 
     const product = new Product(req.body);

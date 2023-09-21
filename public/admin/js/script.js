@@ -180,3 +180,39 @@ if (uploadImage) {
 }
 //End upload image
 
+//Sort
+const sort = document.querySelector("[sort]");
+if (sort) {
+    const sortSelect = sort.querySelector("[sort-select]");
+    const sortClear = sort.querySelector("[sort-clear]");
+    let url = new URL(location.href);
+
+    //Sắp xếp
+    sortSelect.addEventListener("change", (e) => {
+        const sort = e.target.value.split('-');
+        const [sortKey, sortValue] = sort;
+        url.searchParams.set('sortKey', sortKey);
+        url.searchParams.set('sortValue', sortValue);
+        location.href = url.href;
+    })
+
+    //Xóa lựa chọn sắp xếp
+    sortClear.addEventListener("click", (e) => {
+        url.searchParams.delete('sortKey');
+        url.searchParams.delete('sortValue');
+        location.href = url.href;
+    })
+
+    //Thêm selected cho option
+    const query = url.searchParams;
+    if (query) {
+        const sortKey = query.get('sortKey');
+        const sortValue = query.get('sortValue');
+        const stringSort = sortKey + '-' + sortValue;
+        const optionSelected = sortSelect.querySelector(`option[value = ${stringSort}]`);
+        optionSelected.selected = true;
+    }
+
+}
+//End Sort
+
