@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -34,6 +35,9 @@ const systemConfig = require('./config/system.js');
 
 //App locals Variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
+
+//Nhúng tinyMCE
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
 
 //Dùng pug
 app.set('views', `${__dirname}/views`);
