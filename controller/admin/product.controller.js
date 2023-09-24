@@ -141,6 +141,8 @@ module.exports.ceatePOST = async (req, res) => {
     //Lưu vào mongoose  
     await product.save();
 
+    req.flash("success", "Thêm sản phẩm thành công");
+
     res.redirect(`${config.prefixAdmin}/products`);
 }
 

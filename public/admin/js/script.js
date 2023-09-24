@@ -39,16 +39,18 @@ if (formSearch) {
 
 //Pagination
 const buttonPagination = document.querySelectorAll("[button-pagination]");
-buttonPagination.forEach(button => {
-    button.addEventListener("click", () => {
-        const page = button.getAttribute("button-pagination");
-        let url = new URL(location.href);
-        if (page) {
-            url.searchParams.set("page", page);
-        }
-        location.href = url.href;
+if (buttonPagination) {
+    buttonPagination.forEach(button => {
+        button.addEventListener("click", () => {
+            const page = button.getAttribute("button-pagination");
+            let url = new URL(location.href);
+            if (page) {
+                url.searchParams.set("page", page);
+            }
+            location.href = url.href;
+        })
     })
-})
+}
 //End Pagination
 
 //Change Multi
@@ -86,47 +88,49 @@ if (checkboxMulti) {
     //Form 
     const formChangeMulti = document.querySelector("[form-change-multi]");
 
-    formChangeMulti.addEventListener("submit", (e) => {
-        e.preventDefault();
-        let ids = [];
+    if (formChangeMulti) {
+        formChangeMulti.addEventListener("submit", (e) => {
+            e.preventDefault();
+            let ids = [];
 
-        const countChecked = checkboxMulti.querySelectorAll("input[name='id']:checked").length;
+            const countChecked = checkboxMulti.querySelectorAll("input[name='id']:checked").length;
 
-        const typeChange = e.target.elements.type.value;
+            const typeChange = e.target.elements.type.value;
 
-        if (countChecked > 0) {
-            inputsId.forEach(button => {
-                if (button.checked) {
-                    if (typeChange == "change-position") {
-                        const position = button.closest("tr").querySelector("input[name='position']").value;
-                        ids.push(`${button.value}-${position}`);
+            if (countChecked > 0) {
+                inputsId.forEach(button => {
+                    if (button.checked) {
+                        if (typeChange == "change-position") {
+                            const position = button.closest("tr").querySelector("input[name='position']").value;
+                            ids.push(`${button.value}-${position}`);
+                        }
+                        else {
+                            ids.push(button.value);
+                        }
                     }
-                    else {
-                        ids.push(button.value);
+                })
+
+
+                if (typeChange == "delete-all") {
+                    const isConfirm = confirm(`Bạn có chắc chắn muốn xóa ${countChecked} sản phẩm?`);
+                    if (!isConfirm) {
+                        return;
                     }
                 }
-            })
 
-
-            if (typeChange == "delete-all") {
-                const isConfirm = confirm(`Bạn có chắc chắn muốn xóa ${countChecked} sản phẩm?`);
-                if (!isConfirm) {
-                    return;
-                }
+                const inputText = document.querySelector("input[name='ids']");
+                inputText.value = ids.join(", ");
+                formChangeMulti.submit();
+            } else {
+                alert("Vui lòng chọn ít nhất 1 sản phẩm");
             }
-
-            const inputText = document.querySelector("input[name='ids']");
-            inputText.value = ids.join(", ");
-            formChangeMulti.submit();
-        } else {
-            alert("Vui lòng chọn ít nhất 1 sản phẩm");
-        }
-    })
+        })
+    }
 }
 //End form change-multi
 
 //Show Alert
-const showAlert = document.querySelector("[show-alert ]");
+const showAlert = document.querySelector("[show-alert]");
 
 if (showAlert) {
     const time = showAlert.getAttribute('data-time');
