@@ -1,0 +1,31 @@
+extends ../../layouts/default
+
+block main
+  if(productCategory.title)
+    h1(class="mb-4") #{productCategory.title}
+
+  if (productCategory.thumbnail)
+    div(class="mb-4")
+      img(
+        src=productCategory.thumbnail 
+        style="width:100px"
+      )
+
+  if (productCategory.status)
+    div(class="mb-4")
+      span Trạng thái:
+      if (productCategory.status === "active")
+        span(class="badge text-bg-success") Hoạt động
+      else
+        span(class="badge text-bg-danger") Dừng hoạt động
+
+  if (productCategory.position)
+    div(class="mb-4") Vị trí: <b>#{productCategory.position}</b>
+
+  if (productCategory.description)
+    div(class="mb-4") !{productCategory.description}
+
+  a(
+    class="btn btn-warning btn-sm"
+    href = `${prefixAdmin}/products-category/edit/${productCategory.id}`
+    ) chỉnh sửa

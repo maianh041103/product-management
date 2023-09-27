@@ -4,7 +4,7 @@ include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
-include ../../mixins/sort.pug
+include ../../mixins/sort-category.pug
 
 block main
   h1 Danh sách sản phẩm
@@ -15,25 +15,25 @@ block main
     .card-header Bộ lọc và Tìm kiếm
     .card-body  
       .row
-        //- .col-6
-        //-   +filter-status(filterStatus)
+        .col-6
+          +filter-status(filterStatus)
               
-        //- .col-6
-        //-   +search(keyword)
+        .col-6
+          +search(keyword)
 
   .card.mb-3
     .card-header Sắp xếp
     .card-body
       .row
         .col-4
-          //- +sort()
+          +sort-category()
 
   .card.mb-3
     .card-header Danh sách
     .card-body
       .row 
-        //- .col-8
-        //-   +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
+        .col-8
+          +form-change-multi(`${prefixAdmin}/products-category/change-multi?_method=PATCH`)
         
         .col-4
           a(
@@ -117,24 +117,24 @@ block main
                   button-delete
                   ) Xóa
 
+  form(
+    action=""
+    method="POST"
+    id='form-change-status'
+    path=`${prefixAdmin}/products-category/change-status`
+  )
+
+  +pagination(pagination)
+
+  form(
+    action=""
+    method="POST"
+    id='form-delete-item'
+    path=`${prefixAdmin}/products-category/delete/`
+  )
+
   script(src="/admin/js/product.js") 
-      
-//-   +pagination(pagination)
-
-//-   form(
-//-     action=""
-//-     method="POST"
-//-     id='form-change-status'
-//-     path=`${prefixAdmin}/products/change-status`
-//-   )
-
-//-   form(
-//-     action=""
-//-     method="POST"
-//-     id='form-delete-item'
-//-     path=`${prefixAdmin}/products/delete/`
-//-   )
-
+  
 
 
   

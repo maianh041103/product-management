@@ -1,7 +1,6 @@
 //Filter
 const buttonStatus = document.querySelectorAll("[button-status]");
 if (buttonStatus.length > 0) {
-
     buttonStatus.forEach(item => {
         item.addEventListener('click', (e) => {
             let url = new URL(window.location.href);
@@ -39,6 +38,7 @@ if (formSearch) {
 
 //Pagination
 const buttonPagination = document.querySelectorAll("[button-pagination]");
+console.log(buttonPagination);
 if (buttonPagination) {
     buttonPagination.forEach(button => {
         button.addEventListener("click", () => {
