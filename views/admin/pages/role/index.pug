@@ -1,0 +1,24 @@
+extends ../../layouts/default.pug
+
+block main 
+    h1(class="mb-4") Thêm mới nhóm quyền
+
+    form(
+
+    )
+    
+    div(class="form-group")
+        label(for="title") Tiêu đề
+        input(
+            type="text"
+            class="form-control"
+            id="title"
+            name="title"
+            required
+        )
+        div(class="form-group")
+            label(for="desc") Mô tả
+            textarea(
+                class='form-control textarea-mce'
+                name=""
+            ) 
