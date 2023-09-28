@@ -1,0 +1,8 @@
+extends ../../layouts/default
+
+block main 
+    if(role.title)
+        div(class="mb-4") #{role.title}
+
+    if(role.description)
+        div(class="mb-4") !{role.description}
