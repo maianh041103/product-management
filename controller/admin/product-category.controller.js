@@ -162,9 +162,10 @@ module.exports.edit = async (req, res) => {
             deleted: false,
             _id: req.params.id
         })
+        const newProductsCategory = createTreeHelper.createTree(productsCategory);
         res.render('admin/pages/products-category/edit', {
             pageTitle: "Chỉnh sửa danh mục sản phẩm",
-            productsCategory: productsCategory,
+            productsCategory: newProductsCategory,
             productCategory: productCategory
         });
     } catch (error) {
@@ -187,17 +188,25 @@ module.exports.editPATCH = async (req, res) => {
 
 //[GET] /admin/products-category/detail/:id
 module.exports.detail = async (req, res) => {
-    const productCategory = await ProductCategory.findOne({
-        deleted: false,
-        _id: req.params.id
-    })
-    const productCategoryParent = await ProductCategory.findOne({
-        deleted: false,
-        _id: productCategory.parent_id
-    })
-    res.render('admin/pages/products-category/detail.pug', {
-        pageTitle: "Trang chi tiết danh mục sản phẩm",
-        productCategory: productCategory,
-        productCategoryParent: productCategoryParent
-    });
+    try {
+        const productCategory = await ProductCategory.findOne({
+            deleted: false,
+            _id: req.params.id
+        })
+        let valueRender = {
+            pageTitle: "Trang chi tiết danh mục sản phẩm",
+            productCategory: productCategory
+        }
+        if (productCategory.parent_id) {
+            const productCategoryParent = await ProductCategory.findOne({
+                deleted: false,
+                _id: productCategory.parent_id
+            })
+            valueRender.productCategoryParent = productCategoryParent;
+        }
+        res.render('admin/pages/products-category/detail.pug', valueRender);
+
+    } catch (error) {
+        res.redirect(`${config.prefixAdmin}/products-category`);
+    }
 }
