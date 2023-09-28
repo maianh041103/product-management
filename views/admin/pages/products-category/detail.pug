@@ -3,6 +3,12 @@ extends ../../layouts/default
 block main
   if(productCategory.title)
     h1(class="mb-4") #{productCategory.title}
+  
+  if(productCategory.parent_id)
+    div(class="mb-4") Danh mục cha: <b>#{productCategoryParent.title}</b>
+
+  if(productCategory.description)
+    div(class="mb-4") Mô tả: <b>#{productCategory.description}</b>
 
   if (productCategory.thumbnail)
     div(class="mb-4")

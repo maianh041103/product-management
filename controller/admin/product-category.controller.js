@@ -154,14 +154,22 @@ module.exports.deleteItem = async (req, res) => {
 
 //[GET] /admin/products-category/edit/:id
 module.exports.edit = async (req, res) => {
-    const productCategory = await ProductCategory.findOne({
-        deleted: false,
-        _id: req.params.id
-    })
-    res.render('admin/pages/products-category/edit', {
-        pageTitle: "Chỉnh sửa danh mục sản phẩm",
-        productCategory: productCategory
-    });
+    try {
+        const productsCategory = await ProductCategory.find({
+            deleted: false
+        })
+        const productCategory = await ProductCategory.findOne({
+            deleted: false,
+            _id: req.params.id
+        })
+        res.render('admin/pages/products-category/edit', {
+            pageTitle: "Chỉnh sửa danh mục sản phẩm",
+            productsCategory: productsCategory,
+            productCategory: productCategory
+        });
+    } catch (error) {
+        res.redirect(`${config.prefixAdmin}/products-category`);
+    }
 }
 
 //[PATCH] /admin/products-category/edit/:id
@@ -183,8 +191,13 @@ module.exports.detail = async (req, res) => {
         deleted: false,
         _id: req.params.id
     })
+    const productCategoryParent = await ProductCategory.findOne({
+        deleted: false,
+        _id: productCategory.parent_id
+    })
     res.render('admin/pages/products-category/detail.pug', {
         pageTitle: "Trang chi tiết danh mục sản phẩm",
-        productCategory: productCategory
+        productCategory: productCategory,
+        productCategoryParent: productCategoryParent
     });
 }
