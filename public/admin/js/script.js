@@ -38,7 +38,6 @@ if (formSearch) {
 
 //Pagination
 const buttonPagination = document.querySelectorAll("[button-pagination]");
-console.log(buttonPagination);
 if (buttonPagination) {
     buttonPagination.forEach(button => {
         button.addEventListener("click", () => {

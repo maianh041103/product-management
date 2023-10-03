@@ -81,3 +81,27 @@ module.exports.delete = async (req, res) => {
         res.redirect(`${systemConfig.prefixAdmin}/roles`);
     }
 }
+
+//[GET] /admin/role/permissions
+module.exports.permissions = async (req, res) => {
+    const roles = await Role.find({ deleted: false });
+    res.render('admin/pages/role/permission', {
+        pageTitle: "Phân quyền",
+        roles: roles
+    })
+}
+
+//[PATCH] /admin/role/permissions
+module.exports.permissionsPATCH = async (req, res) => {
+    try {
+        const permissions = JSON.parse(req.body.data);
+        for (let item of permissions) {
+            await Role.updateOne({ _id: item.id }, { permissions: item.permissions });
+        }
+        req.flash("success", "Cập nhật nhóm quyền thành công");
+    } catch (error) {
+        req.flash("error", "Cập nhật nhóm quyền thất bại");
+    }
+    res.redirect('back');
+
+}
