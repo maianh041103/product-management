@@ -42,3 +42,47 @@ module.exports.createPOST = async (req, res) => {
     res.redirect(`${systemConfig.prefixAdmin}/accounts`);
   }
 }
+
+//[GET] /admin/accounts/edit/:id
+module.exports.edit = async (req, res) => {
+  const account = await Account.findOne({
+    _id: req.params.id,
+    deleted: false
+  })
+  try {
+    const roles = await Role.find({
+      deleted: false
+    })
+    res.render("admin/pages/accounts/edit", {
+      pageTitle: "Chỉnh sửa tài khoản",
+      account: account,
+      roles: roles
+    });
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/accounts`);
+  }
+}
+
+//[PATCH] /admin/accounts/edit/:id
+module.exports.editPATCH = async (req, res) => {
+  const email = req.body.email;
+  const account = await Account.findOne({
+    deleted: false,
+    _id: { $ne: req.params.id },
+    email: email
+  })
+  if (account) {
+    req.flash("error", `Email ${email} đã tồn tại`);
+  } else {
+    if (req.body.password) {
+      req.body.password = md5(req.body.password);
+    }
+    else {
+      delete req.body.password;
+    }
+    await Account.updateOne({ _id: req.params.id }, req.body);
+    req.flash("success", "Cập nhật thông tin tài khoản thành công");
+  }
+
+  res.redirect("back");
+}

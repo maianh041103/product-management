@@ -8,8 +8,12 @@ const upload = multer();
 
 route.get('/', controller.index);
 
-route.get('/create', uploadFileImage.uploadClound, controller.create);
+route.get('/create', controller.create);
 
 route.post('/create', upload.single("avatar"), uploadFileImage.uploadClound, validate.createPOST, controller.createPOST);
+
+route.get('/edit/:id', controller.edit);
+
+route.patch('/edit/:id', upload.single("avatar"), uploadFileImage.uploadClound, validate.editPATCH, controller.editPATCH);
 
 module.exports = route;
