@@ -45,11 +45,13 @@ module.exports.createPOST = async (req, res) => {
 
 //[GET] /admin/accounts/edit/:id
 module.exports.edit = async (req, res) => {
-  const account = await Account.findOne({
-    _id: req.params.id,
-    deleted: false
-  })
+
   try {
+    const account = await Account.findOne({
+      _id: req.params.id,
+      deleted: false
+    })
+
     const roles = await Role.find({
       deleted: false
     })
@@ -71,6 +73,7 @@ module.exports.editPATCH = async (req, res) => {
     _id: { $ne: req.params.id },
     email: email
   })
+
   if (account) {
     req.flash("error", `Email ${email} đã tồn tại`);
   } else {
@@ -86,3 +89,49 @@ module.exports.editPATCH = async (req, res) => {
 
   res.redirect("back");
 }
+
+//[GET] /admin/accounts/detail/:id
+module.exports.detail = async (req, res) => {
+  try {
+    const account = await Account.findOne({ _id: req.params.id, deleted: false });
+
+    const role = await Role.findOne({ _id: account.role_id });
+    account.role = role;
+
+    res.render("admin/pages/accounts/detail.pug", {
+      pageTitle: "Chi tiết tài khoản",
+      account: account
+    })
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/accounts`);
+  }
+}
+
+//[DELETE] /admin/accounts/delete/:id
+module.exports.deleteItem = async (req, res) => {
+  try {
+    await Account.updateOne(
+      { _id: req.params.id },
+      {
+        deleted: true,
+        deletedAt: new Date()
+      });
+    req.flash("success", "Xóa tài khoản thành công");
+    res.redirect("back");
+  } catch (error) {
+    req.flash("error", "Xóa tài khoản thất bại");
+    res.redirect(`${systemConfig.prefixAdmin}/accounts`);
+  }
+}
+
+//[PATCH] /admin/accounts/change-status/:status/:id
+module.exports.changeStatus = async (req, res) => {
+  try {
+    await Account.updateOne({ _id: req.params.id }, { status: req.params.status });
+    req.flash("success", "Cập nhật trạng thái thành công");
+  } catch (error) {
+    req.flash("error", "Cập nhật trạng thái thất bại");
+  }
+  res.redirect("back");
+}
+

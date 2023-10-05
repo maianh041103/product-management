@@ -70,9 +70,25 @@ block main
                   button(
                     class="btn btn-danger btn-sm ml-1"
                     button-delete
+                    data-id=account.id
                   ) Xóa
+
+            form(
+              action=""
+              method="POST"
+              id="form-change-status"
+              path=`${prefixAdmin}/accounts/change-status`
+            )
+
+            form(
+              action=""
+              method="POST"
+              id="form-delete-item"
+              path=`${prefixAdmin}/accounts/delete/`
+            )
           else
             tr
               td(colspan="4" class="text-center") Chưa có tài khoản nào được tạo
             
+  script(src="/admin/js/product.js") 
 

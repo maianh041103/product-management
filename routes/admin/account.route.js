@@ -16,4 +16,10 @@ route.get('/edit/:id', controller.edit);
 
 route.patch('/edit/:id', upload.single("avatar"), uploadFileImage.uploadClound, validate.editPATCH, controller.editPATCH);
 
+route.get('/detail/:id', controller.detail);
+
+route.delete('/delete/:id', controller.deleteItem);
+
+route.patch('/change-status/:status/:id', controller.changeStatus);
+
 module.exports = route;

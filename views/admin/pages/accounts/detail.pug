@@ -1,0 +1,37 @@
+extends ../../layouts/default
+
+block main
+  if(account.avatar)
+    div(class="mb-4")
+      img(
+        src=account.avatar
+        style="width:100px"
+      )
+
+  if(account.fullName)
+    div(class="mb-4") Họ tên: <b>#{account.fullName}</b>
+
+  if (account.email)
+    div(class="mb-4") Email: <b>#{account.email}</b>
+
+  if (account.phone)
+    div(class="mb-4") Số điện thoại: <b>#{account.phone}</b>
+
+  if (account.role_id)
+    div(class="mb-4") Phân quyền: <b>#{account.role.title}</b>
+
+  if (account.status)
+    div(class="mb-4")
+      span Trạng thái:
+      if (account.status === "active")
+        span(class="badge text-bg-success") Hoạt động
+      else
+        span(class="badge text-bg-danger") Dừng hoạt động
+
+  a(
+    class="btn btn-warning btn-sm"
+    href = `${prefixAdmin}/accounts/edit/${account.id}`
+    ) chỉnh sửa
+
+  script(src="/admin/js/product.js")
+    
