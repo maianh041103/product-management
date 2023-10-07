@@ -1,8 +1,15 @@
 const Role = require('../../models/role.model');
+const Account = require('../../models/account.model');
 const systemConfig = require('../../config/system');
 //[GET] /admin/roles
 module.exports.index = async (req, res) => {
     const records = await Role.find({ deleted: false });
+    for (const record of records) {
+        if (record.createdBy.account_id) {
+            const accUser = await Account.findOne({ _id: res.locals.accountUser._id });
+            record.fullName = accUser.fullName;
+        }
+    }
     res.render('admin/pages/role/index.pug', {
         pageTitle: "Trang phân quyền",
         records: records
@@ -18,6 +25,9 @@ module.exports.create = async (req, res) => {
 
 //[POST] /admin/roles/create
 module.exports.createPOST = async (req, res) => {
+    req.body.createdBy = {
+        account_id: res.locals.accountUser._id
+    }
     const role = new Role(req.body);
     await role.save();
     req.flash("success", "Tạo mới nhóm quyền thành công");
@@ -70,7 +80,10 @@ module.exports.delete = async (req, res) => {
         await Role.updateOne({ _id: req.params.id },
             {
                 deleted: true,
-                deletedAt: new Date()
+                deletedBy: {
+                    account_id: res.locals.accountUser._id,
+                    deletedAt: new Date()
+                }
             });
 
         req.flash("success", "Đã xóa nhóm quyền thành công");
