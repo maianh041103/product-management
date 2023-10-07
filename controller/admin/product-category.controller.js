@@ -1,4 +1,5 @@
 const ProductCategory = require('../../models/product-category.model');
+const Account = require('../../models/account.model');
 const filterStatusHelper = require('../../helpers/filterStatus');
 const config = require('../../config/system');
 const searchHelper = require('../../helpers/search');
@@ -28,7 +29,7 @@ module.exports.index = async (req, res) => {
 
     //Pagination
     let objectPagination = {
-        limitItems: 10,
+        limitItems: 20,
         currentPage: 1,
     }
     const count = await ProductCategory.countDocuments(find);
@@ -49,6 +50,12 @@ module.exports.index = async (req, res) => {
     //End Sort
 
     const productsCategory = await ProductCategory.find(find);
+    for (const productCategory of productsCategory) {
+        if (productCategory.createdBy.account_id) {
+            const accUser = await Account.findOne({ _id: productCategory.createdBy.account_id })
+            productCategory.fullName = accUser.fullName;
+        }
+    }
 
     //Không sắp xếp được theo tiêu chí
     // .sort(sort)
@@ -88,6 +95,8 @@ module.exports.createPOST = async (req, res) => {
         });
         req.body.position = count + 1;
     }
+
+    req.body.createdBy = { account_id: res.locals.accountUser._id }
 
     const record = new ProductCategory(req.body);
 
@@ -149,7 +158,10 @@ module.exports.deleteItem = async (req, res) => {
     const id = req.params.id;
     await ProductCategory.updateOne({ _id: id }, {
         deleted: true,
-        deleteAt: new Date()
+        deletedBy: {
+            account_id: res.locals.accountUser._id,
+            deletedAt: new Date()
+        }
     })
     req.flash("success", "Đã xóa thành công 1 bản ghi")
     res.redirect('back');

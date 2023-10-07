@@ -1,3 +1,5 @@
+include ./moment.pug
+
 mixin table-tree(productsCategory,level=1)
     each item,index in productsCategory
         -prefix = Array(level).join("-- ")
@@ -55,6 +57,11 @@ mixin table-tree(productsCategory,level=1)
                         span(
                             class="badge text-bg-danger"
                         ) Dừng hoạt động
+            
+            td  
+                if(item.createdBy.account_id)
+                    p #{item.fullName}
+                    +formatDate(item.createdBy.createdAt)
                     
             td
                 a(
