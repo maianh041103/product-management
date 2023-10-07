@@ -11,6 +11,10 @@ module.exports.index = async (req, res) => {
   for (let account of accounts) {
     const role = await Role.findOne({ _id: account.role_id });
     account.role = role;
+    if (account.createdBy.account_id) {
+      const accUser = await Account.findOne({ _id: res.locals.accountUser._id });
+      account.fullNameCreate = accUser.fullName;
+    }
   }
   res.render('admin/pages/accounts/index', {
     pageTitle: "Danh sách tài khoản",
@@ -36,6 +40,9 @@ module.exports.createPOST = async (req, res) => {
   }
   else {
     req.body.password = md5(req.body.password);
+    req.body.createdBy = {
+      account_id: res.locals.accountUser._id
+    }
     const account = new Account(req.body);
     await account.save();
     req.flash("success", "Tạo mới tài khoản thành công");
@@ -114,7 +121,10 @@ module.exports.deleteItem = async (req, res) => {
       { _id: req.params.id },
       {
         deleted: true,
-        deletedAt: new Date()
+        deletedBy: {
+          account_id: res.locals.accountUser._id,
+          deletedAt: new Date()
+        }
       });
     req.flash("success", "Xóa tài khoản thành công");
     res.redirect("back");

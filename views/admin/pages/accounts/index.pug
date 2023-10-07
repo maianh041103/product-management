@@ -1,5 +1,6 @@
 extends ../../layouts/default
 include ../../mixins/alert
+include ../../mixins/moment.pug
 
 block main 
   if(user.permissions.includes("account_view"))
@@ -29,6 +30,7 @@ block main
               th Phân quyền
               th Email 
               th Trạng thái
+              th Người tạo
               th Hành động
           tbody 
             if(accounts)
@@ -70,6 +72,10 @@ block main
                         a(
                           class="badge text-bg-danger"
                           ) Dừng hoạt động
+                  td
+                    if(account.createdBy.account_id)
+                      p #{account.fullNameCreate}
+                      +formatDate(account.createdBy.createAt)
                   td 
                     a(
                       class="btn btn-secondary btn-sm"
