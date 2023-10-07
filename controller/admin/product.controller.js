@@ -1,5 +1,6 @@
 const Product = require('../../models/product.model');
 const ProductCategory = require('../../models/product-category.model');
+const Account = require('../../models/account.model');
 const createTreeHelper = require('../../helpers/createTree');
 const filterStatusHelper = require('../../helpers/filterStatus');
 const searchHelper = require('../../helpers/search');
@@ -52,6 +53,15 @@ module.exports.index = async (req, res) => {
         .sort(sort)
         .limit(objectPagination.limitItems)
         .skip(objectPagination.skip);
+
+    for (const product of products) {
+        if (product.createdBy.account_id) {
+            const accUser = await Account.findOne({ _id: product.createdBy.account_id });
+            if (accUser) {
+                product.fullName = accUser.fullName;
+            }
+        }
+    }
 
     res.render('admin/pages/products/index.pug', {
         pageTitle: "Danh sách sản phẩm",
@@ -141,6 +151,8 @@ module.exports.ceatePOST = async (req, res) => {
     else {
         req.body.position = parseInt(req.body.position);
     }
+
+    req.body.createdBy = { account_id: res.locals.accountUser._id };
 
     //create 1 bản ghi vào mongoose 
     const product = new Product(req.body);

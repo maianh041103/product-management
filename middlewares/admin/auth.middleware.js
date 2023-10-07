@@ -5,17 +5,18 @@ module.exports.auth = async (req, res, next) => {
   if (!req.cookies.token) {
     res.redirect(`${systemConfig.prefixAdmin}/auth/login`);
   } else {
-    const user = await Account.findOne({
+    const accountUser = await Account.findOne({
       token: req.cookies.token,
       deleted: false,
       status: "active"
     }).select("-password");
-    if (!user) {
+    if (!accountUser) {
       res.redirect(`${systemConfig.prefixAdmin}/auth/login`);
     }
     else {
-      const roleUser = await Role.findOne({ _id: user.role_id })
+      const roleUser = await Role.findOne({ _id: accountUser.role_id })
         .select("title permissions");
+      res.locals.accountUser = accountUser;
       res.locals.user = roleUser;
       next();
     }

@@ -5,6 +5,7 @@ include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
 include ../../mixins/sort.pug
+include ../../mixins/moment.pug
 
 block main
   if(user.permissions.includes("products_view"))
@@ -59,6 +60,7 @@ block main
               th Giá
               th Vị trí
               th Trạng thái
+              th Người tạo
               th Hành động
 
           tbody
@@ -119,6 +121,10 @@ block main
                       span(
                         class="badge text-bg-danger"
                       ) Dừng hoạt động
+                td 
+                  if(item.fullName)
+                    p #{item.fullName}
+                    +formatDate(item.createdBy.createdAt)
                     
                 td
                   a(

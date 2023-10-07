@@ -40,7 +40,7 @@ module.exports.index = async (req, res) => {
     //Sort
     const sortKey = req.query.sortKey;
     const sortValue = req.query.sortValue;
-    const sort = {};
+    let sort = {};
     if (sortKey && sortValue) {
         sort[sortKey] = sortValue;
     } else {
@@ -48,10 +48,13 @@ module.exports.index = async (req, res) => {
     }
     //End Sort
 
-    const productsCategory = await ProductCategory.find(find)
-        .limit(objectPagination.limitItems)
-        .skip(objectPagination.skip)
-        .sort(sort)
+    const productsCategory = await ProductCategory.find(find);
+
+    //Không sắp xếp được theo tiêu chí
+    // .sort(sort)
+    // .limit(objectPagination.limitItems)
+    // .skip(objectPagination.skip)
+
 
     const newProductsCategory = createTreeHelper.createTree(productsCategory);
 
