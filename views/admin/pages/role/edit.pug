@@ -2,40 +2,43 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main 
-    +alert-error(5000)
-    +alert-success(5000)
-    h1(class="mb-4") Sửa thông tin danh mục sản phẩm
+    if(user.permissions.includes("roles_edit"))
+        +alert-error(5000)
+        +alert-success(5000)
+        h1(class="mb-4") Sửa thông tin nhóm quyền
 
-    form(
-        action=`${prefixAdmin}/roles/edit/${role._id}?_method=PATCH`
-        method="POST"
-    )
+        form(
+            action=`${prefixAdmin}/roles/edit/${role._id}?_method=PATCH`
+            method="POST"
+        )
 
-        div(class='form-group')
-            label(for="title") Tiêu đề
-            input(
-                type="text"
-                name="title"
-                id="title"
-                class='form-control'
-                value=role.title
-                required 
-            )
-        
-        div(class='form-group')
-            label(for='desc') Mô tả
-            textarea(
-                name="description"
-                id="desc"
-                cols="30"
-                rows="5"
-                class='form-control textarea-mce'
-            ) !{role.description} 
-        
+            div(class='form-group')
+                label(for="title") Tiêu đề
+                input(
+                    type="text"
+                    name="title"
+                    id="title"
+                    class='form-control'
+                    value=role.title
+                    required 
+                )
+            
+            div(class='form-group')
+                label(for='desc') Mô tả
+                textarea(
+                    name="description"
+                    id="desc"
+                    cols="30"
+                    rows="5"
+                    class='form-control textarea-mce'
+                ) !{role.description} 
+            
 
-        div(class="form-group")
-            button(
-                type="submit"
-                class="btn btn-primary"
-            ) Cập nhật
+            div(class="form-group")
+                button(
+                    type="submit"
+                    class="btn btn-primary"
+                ) Cập nhật
+    else
+        h1 Bạn không có quyền truy cập trang web này
 

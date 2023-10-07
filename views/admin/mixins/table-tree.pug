@@ -1,13 +1,14 @@
 mixin table-tree(productsCategory,level=1)
     each item,index in productsCategory
         -prefix = Array(level).join("-- ")
-        tr 
-            td
-                input(
-                    type="checkbox"
-                    name="id"
-                    value=item.id
-                )
+        tr
+            if(user.permissions.includes("products-category_edit")) 
+                td
+                    input(
+                        type="checkbox"
+                        name="id"
+                        value=item.id
+                    )
             td #{item.index}
 
             td
@@ -31,34 +32,46 @@ mixin table-tree(productsCategory,level=1)
             
             td
                 if(item.status == "active")
-                    a(
-                    href="javascript:;" 
-                    class="badge text-bg-success"
-                    data-status=item.status
-                    data-id=item.id
-                    ) Hoạt động 
+                    if(user.permissions.includes("products-category_edit"))
+                        a(
+                        href="javascript:;"
+                        class="badge text-bg-success"
+                        data-status=item.status
+                        data-id=item.id
+                        ) Hoạt động
+                    else 
+                        span(
+                            class="badge text-bg-success"
+                        ) Hoạt động
                 else
-                    a(
-                    href="javascript:;" 
-                    class="badge text-bg-danger"
-                    data-status=item.status
-                    data-id=item.id
-                    ) Dừng hoạt động
+                    if(user.permissions.includes("products-category_edit"))
+                        a(
+                        href="javascript:;" 
+                        class="badge text-bg-danger"
+                        data-status=item.status
+                        data-id=item.id
+                        ) Dừng hoạt động
+                    else 
+                        span(
+                            class="badge text-bg-danger"
+                        ) Dừng hoạt động
                     
             td
                 a(
                     class="btn btn-secondary btn-sm"
                     href = `${prefixAdmin}/products-category/detail/${item.id}`
                     ) Chi tiết
-                a(
-                    class="btn btn-warning btn-sm"
-                    href = `${prefixAdmin}/products-category/edit/${item.id}`
-                    ) Sửa
-                button(
-                    class="btn btn-danger btn-sm ml-1"
-                    data-id=item.id 
-                    button-delete
-                    ) Xóa
+                if(user.permissions.includes("products-category_edit"))
+                    a(
+                        class="btn btn-warning btn-sm"
+                        href = `${prefixAdmin}/products-category/edit/${item.id}`
+                        ) Sửa
+                if(user.permissions.includes("products-category_delete"))
+                    button(
+                        class="btn btn-danger btn-sm ml-1"
+                        data-id=item.id 
+                        button-delete
+                        ) Xóa
 
             if(item.children && item.children.length>0)
                     +table-tree(item.children,level+1)
