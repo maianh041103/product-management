@@ -61,6 +61,7 @@ block main
               th Vị trí
               th Trạng thái
               th Người tạo
+              th Người sửa
               th Hành động
 
           tbody
@@ -125,7 +126,11 @@ block main
                   if(item.fullName)
                     p #{item.fullName}
                     +formatDate(item.createdBy.createdAt)
-                    
+
+                td 
+                  if(item.updatedBy.length > 0)
+                    p #{item.updatedBy[item.updatedBy.length - 1].fullName}
+                    +formatDate(item.updatedBy[item.updatedBy.length - 1].updatedAt)    
                 td
                   a(
                     class="btn btn-secondary btn-sm"
