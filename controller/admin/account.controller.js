@@ -11,10 +11,22 @@ module.exports.index = async (req, res) => {
   for (let account of accounts) {
     const role = await Role.findOne({ _id: account.role_id });
     account.role = role;
+    //Created By
     if (account.createdBy.account_id) {
       const accUser = await Account.findOne({ _id: res.locals.accountUser._id });
       account.fullNameCreate = accUser.fullName;
     }
+    //End CreatedBy
+    //Updated By
+    if (account.updatedBy.length > 0) {
+      for (let i = 0; i < account.updatedBy.length; i++) {
+        const accountUpdated = await Account.findOne({ _id: account.updatedBy[i].account_id, deleted: false });
+        if (accountUpdated) {
+          account.updatedBy[i].fullName = accountUpdated.fullName;
+        }
+      }
+    }
+    //End Updated By
   }
   res.render('admin/pages/accounts/index', {
     pageTitle: "Danh sách tài khoản",
@@ -90,7 +102,12 @@ module.exports.editPATCH = async (req, res) => {
     else {
       delete req.body.password;
     }
-    await Account.updateOne({ _id: req.params.id }, req.body);
+    const updatedBy = {
+      account_id: res.locals.accountUser._id,
+      updatedAt: new Date()
+    }
+
+    await Account.updateOne({ _id: req.params.id }, { ...req.body, $push: { updatedBy: updatedBy } });
     req.flash("success", "Cập nhật thông tin tài khoản thành công");
   }
 

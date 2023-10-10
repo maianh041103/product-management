@@ -31,6 +31,7 @@ block main
               th Email 
               th Trạng thái
               th Người tạo
+              th Người sửa
               th Hành động
           tbody 
             if(accounts)
@@ -76,6 +77,10 @@ block main
                     if(account.createdBy.account_id)
                       p #{account.fullNameCreate}
                       +formatDate(account.createdBy.createAt)
+                  td
+                    if(account.updatedBy.length>0)
+                      p #{account.updatedBy[account.updatedBy.length-1].fullName}
+                      +formatDate(account.updatedBy.updatedAt)
                   td 
                     a(
                       class="btn btn-secondary btn-sm"
