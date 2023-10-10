@@ -21,7 +21,11 @@ const roleSchema = new mongoose.Schema({
     deletedBy: {
         account_id: String,
         deletedAt: Date
-    }
+    },
+    updatedBy: [{
+        account_id: String,
+        updatedAt: Date
+    }]
 },
     { timestamps: true }
 )

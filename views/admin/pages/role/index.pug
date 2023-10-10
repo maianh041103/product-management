@@ -29,6 +29,7 @@ block main
               th Nhóm quyền
               th Mô tả ngắn
               th Người tạo
+              th Người sửa
               th Hành động
 
           tbody
@@ -42,6 +43,10 @@ block main
                     if(item.createdBy.account_id)
                       p #{item.fullName}
                       +formatDate(item.createdAt)
+                  td 
+                    if(item.updatedBy.length > 0)
+                      p #{item.updatedBy[item.updatedBy.length-1].fullName}
+                      +formatDate(item.updatedBy[item.updatedBy.length-1].createdAt)
                   td
                     a(
                       class="btn btn-secondary btn-sm"

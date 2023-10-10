@@ -1,14 +1,29 @@
 const Role = require('../../models/role.model');
 const Account = require('../../models/account.model');
 const systemConfig = require('../../config/system');
+const compareArrayHelper = require('../../helpers/compareArray');
+
 //[GET] /admin/roles
 module.exports.index = async (req, res) => {
     const records = await Role.find({ deleted: false });
     for (const record of records) {
+        //CreatedBy
         if (record.createdBy.account_id) {
             const accUser = await Account.findOne({ _id: res.locals.accountUser._id });
             record.fullName = accUser.fullName;
         }
+        //End CreatedBy
+        //UpdatedBy
+        if (record.updatedBy.length > 0) {
+            for (let i = 0; i < record.updatedBy.length; i++) {
+                const accountUpdated = await Account.findOne({ _id: record.updatedBy[i].account_id });
+                if (accountUpdated) {
+                    record.updatedBy[i].fullName = accountUpdated.fullName;
+                }
+                console.log(record);
+            }
+        }
+        //End UpdatedBy
     }
     res.render('admin/pages/role/index.pug', {
         pageTitle: "Trang phân quyền",
@@ -66,7 +81,11 @@ module.exports.edit = async (req, res) => {
 //[PATCH] /admin/role/edit/:id
 module.exports.editPATCH = async (req, res) => {
     try {
-        await Role.updateOne({ _id: req.params.id }, req.body);
+        const updatedBy = {
+            account_id: res.locals.accountUser._id,
+            updatedAt: new Date()
+        }
+        await Role.updateOne({ _id: req.params.id }, { ...req.body, updatedBy: updatedBy });
         req.flash("success", "Bạn đã thay đổi nhóm quyền thành công");
         res.redirect('back');
     } catch (error) {
@@ -107,9 +126,15 @@ module.exports.permissions = async (req, res) => {
 //[PATCH] /admin/role/permissions
 module.exports.permissionsPATCH = async (req, res) => {
     try {
+        const updatedBy = {
+            account_id: res.locals.accountUser._id,
+            updatedAt: new Date()
+        }
         const permissions = JSON.parse(req.body.data);
         for (let item of permissions) {
-            await Role.updateOne({ _id: item.id }, { permissions: item.permissions });
+            const permissionCurrent = await Role.findOne({ _id: item.id }).select("permissions");
+            if (!compareArrayHelper.compare(permissionCurrent.permissions, item.permissions))
+                await Role.updateOne({ _id: item.id }, { permissions: item.permissions, $push: { updatedBy: updatedBy } });
         }
         req.flash("success", "Cập nhật nhóm quyền thành công");
     } catch (error) {
