@@ -84,7 +84,7 @@ module.exports.edit = async (req, res) => {
   }
 }
 
-//[PATCH] /admin/accounts/edit/:id
+//[PATCH] /admin/accounts/edit
 module.exports.editPATCH = async (req, res) => {
   const email = req.body.email;
   const account = await Account.findOne({
