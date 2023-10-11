@@ -23,12 +23,40 @@ block main
                     required 
                 )
 
-            div(claas='form-group')
+            div(class='form-group')
                 label(for="product-category") Danh mục 
                 select(name="productCategory" id="product-category" class="form-control")
                     option(value="") --- Chọn danh mục ---
                     if(productsCategory)
                         +select-tree(productsCategory)
+
+            div(class="form-group form-check form-check-inline")
+                input(
+                    class="form-check-input"
+                    type="radio"
+                    id="feature1"
+                    name="featured"
+                    value="1"
+                )
+                label(
+                    class="form-check-label"
+                    for="featured1"
+                ) Nổi bật
+            
+            div(class="form-group form-check form-check-inline")
+                input(
+                    class="form-check-input"
+                    type="radio"
+                    id="feature0"
+                    name="featured"
+                    value="0"
+                )
+                label(
+                    class="form-check-label"
+                    for="featured0"
+                ) Không
+
+
 
             div(class='form-group')
                 label(for='desc') Mô tả
