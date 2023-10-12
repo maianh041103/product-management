@@ -1,0 +1,6 @@
+include ./product-item
+
+mixin product-list(productsFeatured)
+  .row
+    each item in productsFeatured
+      +product-item(item)
