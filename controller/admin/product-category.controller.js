@@ -98,22 +98,27 @@ module.exports.create = async (req, res) => {
 
 //[POST] /admin/products-category/create
 module.exports.createPOST = async (req, res) => {
-    if (req.body.position) {
-        req.body.position = parseInt(req.body.position);
-    } else {
-        const count = await ProductCategory.count({
-            deleted: false
-        });
-        req.body.position = count + 1;
+    if (res.locals.user.permissions.includes("products-category_create")) {
+        if (req.body.position) {
+            req.body.position = parseInt(req.body.position);
+        } else {
+            const count = await ProductCategory.count({
+                deleted: false
+            });
+            req.body.position = count + 1;
+        }
+
+        req.body.createdBy = { account_id: res.locals.accountUser._id }
+
+        const record = new ProductCategory(req.body);
+
+        await record.save();
+
+        req.flash("success", "Thêm danh mục sản phẩm thành công");
     }
-
-    req.body.createdBy = { account_id: res.locals.accountUser._id }
-
-    const record = new ProductCategory(req.body);
-
-    await record.save();
-
-    req.flash("success", "Thêm danh mục sản phẩm thành công");
+    else {
+        req.flash("error", "Bạn không có quyền thêm danh mục sản phẩm");
+    }
 
     res.redirect(`${config.prefixAdmin}/products-category`);
 }

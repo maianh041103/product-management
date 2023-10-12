@@ -166,26 +166,31 @@ module.exports.ceate = async (req, res) => {
 
 //[POST] /admin/products/create
 module.exports.ceatePOST = async (req, res) => {
-    req.body.price = parseInt(req.body.price);
-    req.body.discountPercentage = parseInt(req.body.discountPercentage);
-    req.body.stock = parseInt(req.body.stock);
+    if (res.locals.user.permissions.includes("products_create")) {
+        req.body.price = parseInt(req.body.price);
+        req.body.discountPercentage = parseInt(req.body.discountPercentage);
+        req.body.stock = parseInt(req.body.stock);
 
-    if (req.body.position == '') {
-        req.body.position = await Product.count() + 1;
+        if (req.body.position == '') {
+            req.body.position = await Product.count() + 1;
+        }
+        else {
+            req.body.position = parseInt(req.body.position);
+        }
+
+        req.body.createdBy = { account_id: res.locals.accountUser._id };
+
+        //create 1 bản ghi vào mongoose 
+        const product = new Product(req.body);
+
+        //Lưu vào mongoose  
+        await product.save();
+
+        req.flash("success", "Thêm sản phẩm thành công");
     }
     else {
-        req.body.position = parseInt(req.body.position);
+        req.flash("error", "Bạn không có quyền thêm sản phẩm");
     }
-
-    req.body.createdBy = { account_id: res.locals.accountUser._id };
-
-    //create 1 bản ghi vào mongoose 
-    const product = new Product(req.body);
-
-    //Lưu vào mongoose  
-    await product.save();
-
-    req.flash("success", "Thêm sản phẩm thành công");
 
     res.redirect(`${config.prefixAdmin}/products`);
 }

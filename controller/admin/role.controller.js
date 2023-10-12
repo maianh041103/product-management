@@ -40,12 +40,16 @@ module.exports.create = async (req, res) => {
 
 //[POST] /admin/roles/create
 module.exports.createPOST = async (req, res) => {
-    req.body.createdBy = {
-        account_id: res.locals.accountUser._id
+    if (res.locals.user.permissions.includes("roles_create")) {
+        req.body.createdBy = {
+            account_id: res.locals.accountUser._id
+        }
+        const role = new Role(req.body);
+        await role.save();
+        req.flash("success", "Tạo mới nhóm quyền thành công");
+    } else {
+        req.flash("error", "Bạn không có quyền thêm nhóm quyền");
     }
-    const role = new Role(req.body);
-    await role.save();
-    req.flash("success", "Tạo mới nhóm quyền thành công");
 
     res.redirect(`${systemConfig.prefixAdmin}/roles`);
 }

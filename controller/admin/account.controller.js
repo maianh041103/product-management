@@ -45,21 +45,25 @@ module.exports.create = async (req, res) => {
 
 //[POST] /admin/accounts/create
 module.exports.createPOST = async (req, res) => {
-  const emailExist = await Account.findOne({ deleted: false, email: req.body.email });
-  if (emailExist) {
-    req.flash("error", `Email ${req.body.email} đã tồn tại`);
-    res.redirect("back");
-  }
-  else {
-    req.body.password = md5(req.body.password);
-    req.body.createdBy = {
-      account_id: res.locals.accountUser._id
+  if (res.locals.user.permissions.includes("account_create")) {
+    const emailExist = await Account.findOne({ deleted: false, email: req.body.email });
+    if (emailExist) {
+      req.flash("error", `Email ${req.body.email} đã tồn tại`);
+      res.redirect("back");
     }
-    const account = new Account(req.body);
-    await account.save();
-    req.flash("success", "Tạo mới tài khoản thành công");
-    res.redirect(`${systemConfig.prefixAdmin}/accounts`);
+    else {
+      req.body.password = md5(req.body.password);
+      req.body.createdBy = {
+        account_id: res.locals.accountUser._id
+      }
+      const account = new Account(req.body);
+      await account.save();
+      req.flash("success", "Tạo mới tài khoản thành công");
+    }
+  } else {
+    req.flash("error", "Bạn không có quyền thêm mới tài khoản");
   }
+  res.redirect(`${systemConfig.prefixAdmin}/accounts`);
 }
 
 //[GET] /admin/accounts/edit/:id
