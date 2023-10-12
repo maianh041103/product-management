@@ -30,9 +30,19 @@ module.exports.detail = async (req, res) => {
 
         const product = await Product.findOne(find);
 
+        if (product.productCategory) {
+            const category = await ProductCategory.findOne({ _id: product.productCategory });
+            if (category) {
+                product.categoryTitle = category.title;
+                product.categorySlug = category.slug;
+            }
+        }
+
+        const productNew = productHelper.calcPriceNew(product);
+
         res.render('client/pages/products/detail.pug', {
             pageTitle: product.title,
-            product: product
+            product: productNew
         });
     } catch (error) {
         res.redirect(`/products`);
@@ -53,9 +63,9 @@ module.exports.category = async (req, res) => {
         deleted: false,
         productCategory: { $in: [productCategory.id, ...productsChildrenId] }
     });
-    console.log(products);
+
     const productsNew = productHelper.createNewPrice(products);
-    console.log(productsNew);
+
     res.render('client/pages/products/index', {
         pageTitle: productCategory.title,
         products: productsNew
