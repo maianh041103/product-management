@@ -1,0 +1,31 @@
+extends ../../layouts/default
+
+block main
+  if(articleCategory.title)
+    h1(class="mb-4") #{articleCategory.title}
+  
+  if(articleCategory.parent_id)
+    div(class="mb-4") Danh mục cha: <b>#{articleCategory.parent_title}</b>
+
+  if (articleCategory.thumbnail)
+    div(class="mb-4")
+      img(
+        src=articleCategory.thumbnail 
+        style="width:100px"
+      )
+
+  if (articleCategory.status)
+    div(class="mb-4")
+      span Trạng thái:
+      if (articleCategory.status === "active")
+        span(class="badge text-bg-success") Hoạt động
+      else
+        span(class="badge text-bg-danger") Dừng hoạt động
+
+  if (articleCategory.description)
+    div(class="mb-4") !{articleCategory.description}
+
+  a(
+    class="btn btn-warning btn-sm"
+    href = `${prefixAdmin}/article-category/edit/${articleCategory.id}`
+    ) Sửa

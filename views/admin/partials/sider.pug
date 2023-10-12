@@ -18,8 +18,8 @@
       if(user.permissions.includes("account_view"))
         li  
           a(href=`${prefixAdmin}/accounts`) Danh sách tài khoản
-  
-      li
-        a(href=`${prefixAdmin}/article-category`) Danh mục bài viết
+      if(user.permissions.includes("article-category_view"))
+        li
+          a(href=`${prefixAdmin}/article-category`) Danh mục bài viết
       
         

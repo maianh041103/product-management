@@ -1,10 +1,10 @@
 include ./moment.pug
 
-mixin table-tree(productsCategory,level=1)
+mixin table-tree(productsCategory,prefixRole,level=1)
     each item,index in productsCategory
         -prefix = Array(level).join("-- ")
         tr
-            if(user.permissions.includes("products-category_edit")) 
+            if(user.permissions.includes(`${prefixRole}_edit`)) 
                 td
                     input(
                         type="checkbox"
@@ -23,18 +23,19 @@ mixin table-tree(productsCategory,level=1)
 
             td #{prefix + item.title}
 
-            td 
-                input(
-                    type="number"
-                    value=item.position
-                    style="width: 60px"
-                    min="1"
-                    name="position"
-                )
+            if(item.position)
+                td 
+                    input(
+                        type="number"
+                        value=item.position
+                        style="width: 60px"
+                        min="1"
+                        name="position"
+                    )
             
             td
                 if(item.status == "active")
-                    if(user.permissions.includes("products-category_edit"))
+                    if(user.permissions.includes(`${prefixRole}_edit`))
                         a(
                         href="javascript:;"
                         class="badge text-bg-success"
@@ -46,7 +47,7 @@ mixin table-tree(productsCategory,level=1)
                             class="badge text-bg-success"
                         ) Hoạt động
                 else
-                    if(user.permissions.includes("products-category_edit"))
+                    if(user.permissions.includes(`${prefixRole}_edit`))
                         a(
                         href="javascript:;" 
                         class="badge text-bg-danger"
@@ -71,14 +72,14 @@ mixin table-tree(productsCategory,level=1)
             td
                 a(
                     class="btn btn-secondary btn-sm"
-                    href = `${prefixAdmin}/products-category/detail/${item.id}`
+                    href = `${prefixAdmin}/${prefixRole}/detail/${item.id}`
                     ) Chi tiết
-                if(user.permissions.includes("products-category_edit"))
+                if(user.permissions.includes(`${prefixRole}_edit`))
                     a(
                         class="btn btn-warning btn-sm"
-                        href = `${prefixAdmin}/products-category/edit/${item.id}`
+                        href = `${prefixAdmin}/${prefixRole}/edit/${item.id}`
                         ) Sửa
-                if(user.permissions.includes("products-category_delete"))
+                if(user.permissions.includes(`${prefixRole}_delete`))
                     button(
                         class="btn btn-danger btn-sm ml-1"
                         data-id=item.id 
@@ -86,4 +87,4 @@ mixin table-tree(productsCategory,level=1)
                         ) Xóa
 
             if(item.children && item.children.length>0)
-                    +table-tree(item.children,level+1)
+                    +table-tree(item.children,prefixRole,level+1)

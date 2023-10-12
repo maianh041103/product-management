@@ -1,0 +1,81 @@
+extends ../../layouts/default.pug
+include ../../mixins/filter-status.pug
+include ../../mixins/search.pug
+include ../../mixins/pagination.pug
+include ../../mixins/form-change-multi-article.pug
+include ../../mixins/alert.pug
+include ../../mixins/sort-category.pug
+include ../../mixins/table-tree.pug
+
+block main
+  if(user.permissions.includes("article-category_view"))
+    h1 Danh mục bài viết
+    
+    +alert-success(5000)
+    +alert-error(5000)
+
+    .card.mb-3
+      .card-header Bộ lọc và Tìm kiếm
+      .card-body  
+        .row
+          .col-6
+            +filter-status(filterStatus)
+                
+          .col-6
+            +search(keyword)
+
+    .card.mb-3
+      .card-header Danh sách
+      .card-body
+        .row 
+          if(user.permissions.includes("article-category_edit"))
+            .col-8
+              +form-change-multi-article(`${prefixAdmin}/article-category/change-multi?_method=PATCH`)
+          
+          if(user.permissions.includes("article-category_create"))
+            .col-4
+              a(
+                href = `${prefixAdmin}/article-category/create`
+                class = "btn btn-outline-success"
+              ) +Thêm mới
+        
+        table(
+          class="table table-hover table-sm"
+          checkbox-multi
+        )
+          thead
+            tr
+              if(user.permissions.includes("article-category_edit"))
+                th
+                    input(type="checkbox" name="checkall")
+              th STT
+              th Hình ảnh
+              th Tiêu đề
+              th Trạng thái
+              th Người tạo
+              th Người sửa
+              th Hành động
+
+          tbody
+            +table-tree(articlesCategory,"article-category")
+
+    form(
+      action=""
+      method="POST"
+      id='form-change-status'
+      path=`${prefixAdmin}/article-category/change-status`
+    )
+
+    //-+pagination(pagination)
+
+    form(
+      action=""
+      method="POST"
+      id='form-delete-item'
+      path=`${prefixAdmin}/article-category/delete/`
+    )
+  else
+    h1 Bạn không có quyền truy cập trang web này
+
+  script(src="/admin/js/product.js") 
+  
