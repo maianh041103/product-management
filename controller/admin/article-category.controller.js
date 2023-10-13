@@ -46,9 +46,10 @@ module.exports.index = async (req, res) => {
     }
   }
 
+  const articleCategoryTree = treeHelper.createTree(articlesCategory);
   res.render('admin/pages/article-category/index', {
     pageTitle: "Danh mục bài viết",
-    articlesCategory: articlesCategory,
+    articlesCategory: articleCategoryTree,
     filterStatus: filterStatus,
     keyword: objectSearch.keyword
   });
@@ -59,7 +60,6 @@ module.exports.create = async (req, res) => {
   const articlesCategory = await ArticleCategory.find({
     deleted: false
   });
-
   const articlesCategoryTree = treeHelper.createTree(articlesCategory);
   res.render('admin/pages/article-category/create.pug', {
     pageTitle: "Tạo danh mục bài viết",
@@ -108,10 +108,11 @@ module.exports.changeStatus = async (req, res) => {
 module.exports.edit = async (req, res) => {
   const articleCategory = await ArticleCategory.findOne({ _id: req.params.id });
   const articlesCategory = await ArticleCategory.find({ deleted: false });
+  const articlesCategoryTree = treeHelper.createTree(articlesCategory);
   res.render('admin/pages/article-category/edit.pug', {
     pageTitle: "Chỉnh sửa danh mục bài viết",
     articleCategory: articleCategory,
-    articlesCategory: articlesCategory
+    articlesCategory: articlesCategoryTree
   })
 }
 
