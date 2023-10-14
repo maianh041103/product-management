@@ -1,6 +1,10 @@
+include ../mixins/alert.pug
+
 doctype html
 html(lang="en")
     head
+        +alert-success(2000)
+        +alert-error(2000)
         title #{pageTitle}
 
         //- Nhung bootstrap 4

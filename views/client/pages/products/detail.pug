@@ -8,7 +8,7 @@ block main
         .col-6 
           .inner-thumb
             if (product.thumbnail)
-              img(src=product.thumbnail style="width: 100px")
+              img(src=product.thumbnail style="width: 300px")
         .col-6 
           h1(class="inner-title") #{product.title}
 
@@ -29,24 +29,24 @@ block main
           if(product.stock)
             div(class="inner-stock") Còn lại <span>#{product.stock}</span> sản phẩm
 
-        form(
-          action=`/cart/add/${product.id}`
-          method="POST"
-        )
-          input(
-            class="form-control mb-2"
-            type="number"
-            name="quantity"
-            id="quantity"
-            value="1"
-            min=1
-            max=product.stock
+          form(
+            action=`/cart/add/${product.id}`
+            method="POST"
           )
+            input(
+              class="form-control mb-2"
+              type="number"
+              name="quantity"
+              id="quantity"
+              value="1"
+              min=1
+              max=product.stock
+            )
 
-          button(
-            type="submit"
-            class="btn btn-success btn-block"
-          ) Thêm vào giỏ hàng
+            button(
+              type="submit"
+              class="btn btn-success btn-block"
+            ) Thêm vào giỏ hàng
     hr
 
     .container.my-5
