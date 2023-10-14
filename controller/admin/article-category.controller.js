@@ -5,7 +5,7 @@ const searchHelper = require('../../helpers/search');
 const treeHelper = require('../../helpers/createTree');
 const systemConfig = require('../../config/system');
 
-//[GET] /admin/article-category
+//[GET] /admin/articles-category
 module.exports.index = async (req, res) => {
   const find = {
     deleted: false
@@ -55,7 +55,7 @@ module.exports.index = async (req, res) => {
   });
 }
 
-//[GET] /admin/article-category/create
+//[GET] /admin/articles-category/create
 module.exports.create = async (req, res) => {
   const articlesCategory = await ArticleCategory.find({
     deleted: false
@@ -67,7 +67,7 @@ module.exports.create = async (req, res) => {
   });
 }
 
-//[POST] /admin/article-category/create
+//[POST] /admin/articles-category/create
 module.exports.createPOST = async (req, res) => {
   try {
     req.body.createdBy = {
@@ -79,10 +79,10 @@ module.exports.createPOST = async (req, res) => {
   } catch (error) {
     req.flash("error", "Tạo mới danh mục bài viết thất bại");
   }
-  res.redirect(`${systemConfig.prefixAdmin}/article-category`);
+  res.redirect(`${systemConfig.prefixAdmin}/articles-category`);
 }
 
-//[PATCH] /admin/article-category/change-status/:status/:id
+//[PATCH] /admin/articles-category/change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
   try {
     const updatedBy = {
@@ -104,7 +104,7 @@ module.exports.changeStatus = async (req, res) => {
   res.redirect("back");
 }
 
-//[GET] /admin/article-category/edit/:id
+//[GET] /admin/articles-category/edit/:id
 module.exports.edit = async (req, res) => {
   const articleCategory = await ArticleCategory.findOne({ _id: req.params.id });
   const articlesCategory = await ArticleCategory.find({ deleted: false });
@@ -116,7 +116,7 @@ module.exports.edit = async (req, res) => {
   })
 }
 
-//[PATCH] /admin/article-category/edit/:id
+//[PATCH] /admin/articles-category/edit/:id
 module.exports.editPATCH = async (req, res) => {
   try {
     const updatedBy = {
@@ -131,7 +131,7 @@ module.exports.editPATCH = async (req, res) => {
   res.redirect("back");
 }
 
-//[GET] /admin/article-category/detail/:id
+//[GET] /admin/articles-category/detail/:id
 module.exports.detail = async (req, res) => {
   try {
     const articleCategory = await ArticleCategory.findOne({
@@ -149,11 +149,11 @@ module.exports.detail = async (req, res) => {
       articleCategory: articleCategory
     })
   } catch (error) {
-    res.redirect(`${systemConfig.prefixAdmin}/article-category`);
+    res.redirect(`${systemConfig.prefixAdmin}/articles-category`);
   }
 }
 
-//[DELETE] /admin/article-category/delete/:id
+//[DELETE] /admin/articles-category/delete/:id
 module.exports.deleteItem = async (req, res) => {
   try {
     await ArticleCategory.updateOne(
@@ -172,7 +172,7 @@ module.exports.deleteItem = async (req, res) => {
   res.redirect('back');
 }
 
-//[PATCH] /admin/article-category/change-multi
+//[PATCH] /admin/articles-category/change-multi
 module.exports.changeMulti = async (req, res) => {
   const type = req.body.type;
   const ids = req.body.ids.split(',');

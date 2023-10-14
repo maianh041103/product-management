@@ -3,14 +3,14 @@ include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
 
 block main 
-    if(user.permissions.includes("article-category_edit"))
+    if(user.permissions.includes("article_create"))
         +alert-error(5000)
         +alert-success(5000)
-        h1(class="mb-4") Sửa thông tin danh mục bài viết
+        h1(class="mb-4") Thêm mới bài viết
 
         form(
-            action=`${prefixAdmin}/articles-category/edit/${articleCategory._id}?_method=PATCH`
-            id="from-edit-product"
+            action=`${prefixAdmin}/articles/create`
+            id="from-create-product"
             method="POST"
             enctype="multipart/form-data"
         )
@@ -21,15 +21,15 @@ block main
                     name="title"
                     id="title"
                     class='form-control'
-                    value=articleCategory.title
                     required 
                 )
-            
+
             div(class='form-group')
-                label(for="parent_id") Danh mục cha
-                select(name="parent_id" id="parent_id" class="form-control")
-                    option(value="") --- Chọn danh mục cha ---
-                    +select-tree(articlesCategory,articleCategory.parent_id)
+                label(for="article-category") Danh mục 
+                select(name="articleCategory" id="article-category" class="form-control")
+                    option(value="") --- Chọn danh mục ---
+                    if(articlesCategory)
+                        +select-tree(articlesCategory)
 
             div(class='form-group')
                 label(for='desc') Mô tả ngắn
@@ -39,7 +39,17 @@ block main
                     cols="30"
                     rows="5"
                     class='form-control textarea-mce'
-                ) !{articleCategory.description} 
+            ) 
+
+            div(class='form-group')
+                label(for='content') Nội dung
+                textarea(
+                    name="content"
+                    id="content"
+                    cols="30"
+                    rows="5"
+                    class='form-control textarea-mce'
+            ) 
             
             div(
                 class="form-group"
@@ -55,7 +65,7 @@ block main
                     upload-image-input
                 )
                 img(
-                    src=articleCategory.thumbnail
+                    src=""
                     upload-image-preview
                     class="image-preview"
                 )
@@ -63,7 +73,7 @@ block main
                     delete-image
                     class="btn btn-danger"
                 ) x
-                
+           
             div(class="form-group form-check form-check-inline")
                 input(
                     type='radio'
@@ -71,7 +81,7 @@ block main
                     id="statusActive"
                     value="active"
                     class="form-check-input"
-                    checked = articleCategory.status=="active"?true:false
+                    checked
                 )
                 label(
                     for="statusActive" class="form-check-label"
@@ -84,7 +94,6 @@ block main
                     id="statusInActive"
                     value="inactive"
                     class="form-check-input"
-                    checked = articleCategory.status=="inactive"?true:false
                 )
                 label(
                     for="statusInActive" class="form-check-label"
@@ -94,5 +103,8 @@ block main
                 button(
                     type="submit"
                     class="btn btn-primary"
-                ) Sửa
-            
+                ) Tạo mới
+    else 
+        h1 Bạn không có quyền truy cập trang web này
+
+                

@@ -30,12 +30,12 @@ block main
         .row 
           if(user.permissions.includes("article-category_edit"))
             .col-8
-              +form-change-multi-article(`${prefixAdmin}/article-category/change-multi?_method=PATCH`)
+              +form-change-multi-article(`${prefixAdmin}/articles-category/change-multi?_method=PATCH`)
           
           if(user.permissions.includes("article-category_create"))
             .col-4
               a(
-                href = `${prefixAdmin}/article-category/create`
+                href = `${prefixAdmin}/articles-category/create`
                 class = "btn btn-outline-success"
               ) +Thêm mới
         
@@ -63,7 +63,7 @@ block main
       action=""
       method="POST"
       id='form-change-status'
-      path=`${prefixAdmin}/article-category/change-status`
+      path=`${prefixAdmin}/articles-category/change-status`
     )
 
     //-+pagination(pagination)
@@ -72,7 +72,7 @@ block main
       action=""
       method="POST"
       id='form-delete-item'
-      path=`${prefixAdmin}/article-category/delete/`
+      path=`${prefixAdmin}/articles-category/delete/`
     )
   else
     h1 Bạn không có quyền truy cập trang web này

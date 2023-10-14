@@ -20,6 +20,9 @@
           a(href=`${prefixAdmin}/accounts`) Danh sách tài khoản
       if(user.permissions.includes("article-category_view"))
         li
-          a(href=`${prefixAdmin}/article-category`) Danh mục bài viết
+          a(href=`${prefixAdmin}/articles-category`) Danh mục bài viết
+      if(user.permissions.includes("article_view"))
+        li
+          a(href=`${prefixAdmin}/articles`) Danh sách bài viết
       
         
