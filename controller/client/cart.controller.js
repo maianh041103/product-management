@@ -1,4 +1,22 @@
 const Cart = require('../../models/cart.model');
+const Product = require('../../models/product.model');
+const productHelper = require('../../helpers/product.js');
+
+//[GET] /cart/
+module.exports.index = async (req, res) => {
+  const cart = await Cart.findOne({ _id: req.cookies.cartId });
+  for (const item of cart.products) {
+    const product = await Product.findOne({ _id: item.product_id });
+    const productNew = productHelper.calcPriceNew(product);
+    productNew.totalPrice = parseInt(productNew.priceNew * item.quantity);
+    item.product = productNew;
+  }
+  cart.totalPrice = cart.products.reduce((calc, item) => calc + item.product.totalPrice, 0);
+  res.render("client/pages/cart/index.pug", {
+    pageTitle: "Giỏ hàng",
+    cart: cart
+  });
+}
 
 //[POST] /cart/add/:id 
 module.exports.addPOST = async (req, res) => {
