@@ -15,6 +15,9 @@ module.exports.cartId = async (req, res, next) => {
           return calc + item.quantity;
         }, 0)
       }
+      else {
+        cart.totalQuantity = 0;
+      }
     }
     res.locals.minicart = cart;
   }

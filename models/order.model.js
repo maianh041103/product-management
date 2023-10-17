@@ -19,7 +19,10 @@ const orderSchema = mongoose.Schema({
     type: Boolean,
     default: false
   },
-  deletedAt: new Date()
+  deletedAt: {
+    type: Date,
+    default: new Date()
+  }
 }, {
   timestamps: true
 })
