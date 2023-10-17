@@ -9,9 +9,13 @@ module.exports.cartId = async (req, res, next) => {
 
   } else {
     const cart = await Cart.findOne({ _id: req.cookies.cartId });
-    cart.totalQuantity = cart.products.reduce((calc, item) => {
-      return calc + item.quantity;
-    }, 0)
+    if (cart) {
+      if (cart.products.length > 0) {
+        cart.totalQuantity = cart.products.reduce((calc, item) => {
+          return calc + item.quantity;
+        }, 0)
+      }
+    }
     res.locals.minicart = cart;
   }
 
