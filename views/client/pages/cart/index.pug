@@ -41,6 +41,7 @@ block main
                     input(
                       type="number"
                       min=1
+                      name="quantity"
                       value=item.quantity
                       style="width:60px"
                       data-id=item.product_id
@@ -56,3 +57,5 @@ block main
         h3(class="text-right") Tổng đơn hàng: #{cart.totalPrice}$
         div(class="text-right mt-3")
           a(href="/checkout" class="btn btn-success") THANH TOÁN
+
+  script(src="/js/cart.js")

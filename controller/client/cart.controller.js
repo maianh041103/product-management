@@ -70,3 +70,24 @@ module.exports.delete = async (req, res) => {
   }
   res.redirect("back");
 }
+
+//[GET] /cart/update/:productId/:quatity
+module.exports.update = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const quantity = req.params.quantity;
+    await Cart.updateOne({
+      _id: req.cookies.cartId,
+      "products.product_id": productId
+    }, {
+      '$set': {
+        "products.$.quantity": quantity
+      }
+    })
+    req.flash("success", "Cập nhật số lượng thành công");
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Cập nhật số lượng sản phẩm thất bại");
+  }
+  res.redirect("back");
+}

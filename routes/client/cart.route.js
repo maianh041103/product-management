@@ -9,4 +9,6 @@ route.post('/add/:id', controller.addPOST);
 
 route.get('/delete/:productId', controller.delete);
 
+route.get('/update/:productId/:quantity', controller.update);
+
 module.exports = route;
