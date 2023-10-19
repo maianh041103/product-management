@@ -53,8 +53,17 @@ module.exports.order = async (req, res) => {
 }
 
 module.exports.success = async (req, res) => {
-  console.log(req.params.orderId);
+  const order = await Order.findOne({ _id: req.params.orderId });
+  for (const item of order.products) {
+    const product = await Product.findOne({ _id: item.product_id });
+    const productNew = productHelper.calcPriceNew(product);
+    item.product = productNew;
+    item.totalPrice = item.product.priceNew * item.quantity
+  }
+  order.totalPrice = order.products.reduce((calc, item) => calc + item.totalPrice, 0);
+
   res.render("client/pages/checkout/success.pug", {
     pageTitle: "Mua hàng thành công",
+    order: order
   })
 }
