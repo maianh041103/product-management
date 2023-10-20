@@ -1,0 +1,6 @@
+include ./article-item
+
+mixin article-list(articles)
+  .row
+    each item in articles
+      +article-item(item)

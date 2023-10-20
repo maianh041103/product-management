@@ -1,6 +1,4 @@
-const ProductCategory = require('../models/product-category.model');
-
-module.exports.getSubCategory = async (parentId) => {
+module.exports.getSubCategory = async (parentId, ProductCategory) => {
   const subCategory = async (parentId) => {
     const getCategory = await ProductCategory.find({
       deleted: false,

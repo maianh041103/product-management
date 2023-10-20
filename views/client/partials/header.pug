@@ -34,6 +34,10 @@ header.header
               -const pathProduct="/products"
               a(href=pathProduct) Sản phẩm
                 +sub-menu(layoutProductsCategory,pathProduct)
+            li(class="sub-menu")
+              -const pathArticle="/articles"
+              a(href=pathArticle) Bài viết
+                +sub-menu(layoutArticlesCategory,pathArticle)
             li
               a(href="/cart") Giỏ hàng( #{minicart?minicart.totalQuantity:"0"} )
             if(user)

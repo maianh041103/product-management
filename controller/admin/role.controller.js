@@ -20,7 +20,6 @@ module.exports.index = async (req, res) => {
                 if (accountUpdated) {
                     record.updatedBy[i].fullName = accountUpdated.fullName;
                 }
-                console.log(record);
             }
         }
         //End UpdatedBy

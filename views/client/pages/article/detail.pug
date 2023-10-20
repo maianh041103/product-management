@@ -1,0 +1,28 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+  .article-detail
+    .container.my-5 
+      .row 
+        .col-6 
+          .inner-thumb
+            if (article.thumbnail)
+              img(src=article.thumbnail style="width: 300px")
+        .col-6 
+          h1(class="inner-title") #{article.title}
+
+          if(article.articleCategory)
+            div(class="inner-category")
+              span Danh mục: 
+                a(href=`/articles/${article.categorySlug}`) #{article.categoryTitle}
+          
+          if(article.description)
+            div(class="inner-description") Mô tả ngắn : !{article.description}
+    hr
+
+    .container.my-5
+      .row
+        .col-12
+          +box-head("Mô tả sản phẩm")
+          .inner-desc !{article.content}
