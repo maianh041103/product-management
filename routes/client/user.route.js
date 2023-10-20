@@ -13,4 +13,8 @@ route.post('/login', userValidate.loginPOST, controller.loginPOST);
 
 route.get('/logout', controller.logout);
 
+route.get('/password/forgot', controller.forgotPassword);
+
+route.post('/password/forgot', userValidate.forgotPassword, controller.forgotPasswordPOST);
+
 module.exports = route;
