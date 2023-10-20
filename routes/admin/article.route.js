@@ -13,4 +13,15 @@ route.get('/create', controller.create);
 route.post('/create', fileUpload.single('thumbnail'), uploadClound.uploadClound, validateCategory.createPost, controller.createPOST);
 
 route.patch('/change-status/:status/:id', controller.changeStatus);
+
+route.get('/detail/:id', controller.detail);
+
+route.get('/edit/:id', controller.edit);
+
+route.patch('/edit/:id', fileUpload.single('thumbnail'), uploadClound.uploadClound, validateCategory.createPost, controller.editPATCH);
+
+route.delete('/delete/:id', controller.deleteItem);
+
+route.patch('/change-multi', controller.changeMulti);
+
 module.exports = route;

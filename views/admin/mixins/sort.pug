@@ -16,3 +16,18 @@ mixin sort()
             class="btn btn-danger mt-2"
             sort-clear
         ) Clear
+
+mixin sort-articles()
+    div(sort)
+        select(
+            class="form-control"
+            name="sort"
+            sort-select
+        )
+            option(value="title-asc") Tiêu đề từ A-Z
+            option(value="title-desc") Tiêu đề từ Z-A
+
+        button(
+            class="btn btn-danger mt-2"
+            sort-clear
+        ) Clear

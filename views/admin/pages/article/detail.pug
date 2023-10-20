@@ -1,0 +1,33 @@
+extends ../../layouts/default.pug
+
+block main 
+  if(user.permissions.includes("article_view"))
+    if(article.title)
+      h1(class="mb-4") #{article.title}
+    if(article.articleCategory)
+      div(class="mb-4") <b>Danh mục: #{article.articleCategoryName}</b>
+    if(article.thumbnail)
+      div(class="mb-4")
+        img(
+          src=article.thumbnail 
+          alt=article.title
+          width="100px"
+        )
+    if(article.content)
+      div(class="mb-4") !{article.content}
+    if(article.status)
+      div(class="mb-4")
+        span <b>Trạng thái:</b>
+        if(article.status == "active")
+          span(class="badge text-bg-success") Hoạt động
+        else 
+          span(class="badge text-bg-danger") Dừng hoạt động
+
+    if(article.createdBy.account_id)
+      div(class="mb-4") <b>Tác giả :</b> #{article.accountCreatedName}
+      
+    if(user.permissions.includes("article_edit"))
+      a(
+        class="btn btn-warning btn-sm"
+        href=`${prefixAdmin}/articles/edit/${article.id}`
+      ) Chỉnh sửa

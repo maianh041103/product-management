@@ -11,6 +11,7 @@ block main
   if(user.permissions.includes("article_view"))
     h1 Danh sách bài viết
     
+    +alert-error(5000)
     +alert-success(5000)
 
     .card.mb-3
@@ -28,7 +29,7 @@ block main
       .card-body
         .row
           .col-4
-            +sort()
+            +sort-articles()
 
     .card.mb-3
       .card-header Danh sách
@@ -36,7 +37,7 @@ block main
         .row 
           if(user.permissions.includes("article_edit"))
             .col-8
-              +form-change-multi(`${prefixAdmin}/articles/change-multi?_method=PATCH`)
+              +form-change-multi-articles(`${prefixAdmin}/articles/change-multi?_method=PATCH`)
           
           if(user.permissions.includes("article_create"))
             .col-4
