@@ -158,3 +158,51 @@ module.exports.resetPasswordPost = async (req, res) => {
     res.redirect("back");
   }
 }
+
+//[GET] /user/info
+module.exports.info = async (req, res) => {
+  const user = await User.findOne({
+    tokenUser: req.cookies.tokenUser
+  })
+  res.render("client/pages/user/info", {
+    pageTitle: "Thông tin chi tiết"
+  })
+}
+
+//[GET] user/info/edit
+module.exports.infoEdit = async (req, res) => {
+  const user = await User.findOne({
+    tokenUser: req.cookies.tokenUser
+  })
+  res.render("client/pages/user/info-edit", {
+    pageTitle: "Sửa thông tin cá nhân",
+    user: user
+  })
+}
+
+//[PATCH] /user/info/edit
+module.exports.infoEditPATCH = async (req, res) => {
+  try {
+    const email = req.body.email;
+    const user = await User.findOne({ email: email });
+    const emailExist = await User.findOne({
+      _id: { $ne: user._id },
+      email: email
+    });
+    if (emailExist) {
+      req.flash("error", "Email đã tồn tại");
+      res.redirect("back");
+      return;
+    }
+    if (req.body.password) {
+      req.body.password = md5(req.body.password);
+    } else {
+      delete req.body.password;
+    }
+    await User.updateOne({ tokenUser: req.cookies.tokenUser }, req.body)
+    req.flash("success", "Cập nhật thông tin tài khoản thành công");
+  } catch (error) {
+    req.flash("error", "Cập nhật thông tin tài khỏan thất bại");
+  }
+  res.redirect("back");
+}
