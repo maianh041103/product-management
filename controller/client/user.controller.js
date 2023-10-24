@@ -2,6 +2,7 @@ const md5 = require('md5');
 const User = require('../../models/user.model');
 const ForgotPassword = require('../../models/forgot-password.model');
 const generateHelper = require('../../helpers/generate');
+const sendEmailHelper = require('../../helpers/sendEmail');
 
 //[GET] /user/register
 module.exports.register = async (req, res) => {
@@ -93,5 +94,67 @@ module.exports.forgotPasswordPOST = async (req, res) => {
   await forgotPassword.save();
 
   //Gửi mail
-  res.send("OK");
+  const subject = "Mã OTP đổi mật khẩu";
+  const html = `
+      Mã OTP : <b style="color:green">${req.body.otp}</b>
+  `
+  sendEmailHelper.sendEmail(email, subject, html);
+
+  res.redirect(`/user/password/otp?email=${email}`);
+}
+
+//[GET] /user/password/otp
+module.exports.otpPassword = async (req, res) => {
+  const email = req.query.email;
+  res.render("client/pages/user/otp-password.pug", {
+    pageTitle: "Gửi mã OTP",
+    email: email
+  })
+}
+
+//[POST] /user/password/otp
+module.exports.otpPasswordPOST = async (req, res) => {
+  const email = req.body.email;
+  const otp = req.body.otp;
+  const result = await ForgotPassword.findOne({
+    email: email,
+    otp: otp
+  });
+
+  if (!result) {
+    req.flash("error", "Mã OTP sai");
+    res.redirect("back");
+    return;
+  }
+
+  const user = await User.findOne({
+    email: email
+  });
+
+  res.cookie("tokenUser", user.tokenUser);
+
+  res.redirect('/user/password/reset');
+}
+
+//[GET] /user/password/reset
+module.exports.resetPassword = async (req, res) => {
+  res.render("client/pages/user/reset-password", {
+    pageTitle: " Thay đổi mật khẩu"
+  })
+}
+
+//[POST] /user/password/reset
+module.exports.resetPasswordPost = async (req, res) => {
+  const password = req.body.password;
+  try {
+    await User.updateOne({
+      tokenUser: req.cookies.tokenUser
+    }, {
+      password: md5(password)
+    })
+    res.redirect('/');
+  } catch (error) {
+    req.flash("Đổi mật khẩu thất bại");
+    res.redirect("back");
+  }
 }
