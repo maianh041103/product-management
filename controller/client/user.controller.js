@@ -3,6 +3,7 @@ const User = require('../../models/user.model');
 const ForgotPassword = require('../../models/forgot-password.model');
 const generateHelper = require('../../helpers/generate');
 const sendEmailHelper = require('../../helpers/sendEmail');
+const Cart = require('../../models/cart.model');
 
 //[GET] /user/register
 module.exports.register = async (req, res) => {
@@ -58,12 +59,23 @@ module.exports.loginPOST = async (req, res) => {
   }
   res.cookie("tokenUser", emailExist.tokenUser);
 
+  const cart = await Cart.findOne({
+    user_id: emailExist._id
+  });
+
+  if (cart) {
+    res.cookie("cartId", cart.id);
+  } else {
+    await Cart.updateOne({ _id: req.cookies.cartId }, { user_id: emailExist.id });
+  }
+
   res.redirect('/');
 }
 
 //[GET] /user/logout
 module.exports.logout = async (req, res) => {
   res.clearCookie("tokenUser");
+  res.clearCookie("cartId");
   res.redirect("/user/login");
 }
 
