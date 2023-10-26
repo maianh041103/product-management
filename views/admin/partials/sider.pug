@@ -24,5 +24,8 @@
       if(user.permissions.includes("article_view"))
         li
           a(href=`${prefixAdmin}/articles`) Danh sách bài viết
+      if(user.permissions.includes("setting-general_view"))
+        li 
+          a(href=`${prefixAdmin}/settings/general`) Cài đặt chung
       
         

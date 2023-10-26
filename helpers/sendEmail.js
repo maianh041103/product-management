@@ -1,16 +1,16 @@
 const nodemailer = require('nodemailer');
 
-module.exports.sendEmail = (email, subject, html) => {
+module.exports.sendEmail = (res, email, subject, html) => {
   var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'nguyenmaianh041103@gmail.com',
+      user: res.locals.settingGeneral.email,
       pass: 'vacy wbcw jkxn lpox'
     }
   });
 
   var mailOptions = {
-    from: 'nguyenmaianh041103@gmail.com',
+    from: res.locals.settingGeneral.email,
     to: email,
     subject: subject,
     html: html

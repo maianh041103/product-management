@@ -110,7 +110,7 @@ module.exports.forgotPasswordPOST = async (req, res) => {
   const html = `
       Mã OTP : <b style="color:green">${req.body.otp}</b>
   `
-  sendEmailHelper.sendEmail(email, subject, html);
+  sendEmailHelper.sendEmail(res, email, subject, html);
 
   res.redirect(`/user/password/otp?email=${email}`);
 }
