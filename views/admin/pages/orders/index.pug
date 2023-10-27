@@ -1,0 +1,52 @@
+extends ../../layouts/default.pug
+include ../../mixins/moment.pug
+include ../../mixins/search.pug
+
+block main 
+  if(user.permissions.includes("order_view"))
+    h1(class="mb-4") Danh sách đơn hàng
+
+    .card.mb-3
+      .card-header Danh sách
+      .card-body
+        table(
+          class="table table-hover table-sm"
+        )
+          thead
+            tr
+              th STT
+              th Mã đơn hàng
+              th Khách hàng
+              th SL
+              th Tổng tiền
+              th Trạng thái
+
+          tbody
+            if(orders.length > 0)
+              each item, index in orders
+                tr
+                  td #{index + 1}
+                  td 
+                    p <b style="color:blue">#{item.id}</b>
+                    +formatDate(item.createdAt)
+                  td 
+                    p Họ tên: #{item.userInfo.fullName}
+                    p Số điện thoại: #{item.userInfo.phone}
+                    p Email: #{item.userInfo.address}
+                  td #{item.totalQuantity}
+                  td #{item.totalPrice}
+                  td 
+                    if(item.time<1)
+                      span(class="badge text-bg-secondary") Chờ xác nhận
+                    else if(item.time<2)
+                      span(class="badge text-bg-warning") Chờ lấy hàng
+                    else if(item.time<3)
+                      span(class="badge text-bg-primary") Đang giao
+                    else
+                      span(class="badge text-bg-success") Đã giao
+        
+            else
+              tr
+                td(colspan="4" class="text-center") Chưa có đơn hàng nào
+  else
+    h1 Bạn không có quyền truy cập trang web này
