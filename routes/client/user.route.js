@@ -32,4 +32,8 @@ route.get('/info/edit', authMiddlerware.requireAuth, controller.infoEdit);
 
 route.patch('/info/edit', controller.infoEditPATCH);
 
+route.get('/info/change-password', controller.changePassword);
+
+route.patch('/info/change-password', controller.changePasswordPATCH);
+
 module.exports = route;

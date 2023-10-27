@@ -28,17 +28,13 @@ block main
         id="email"
         value=user.email
       )
-    
+       
     div(class="form-group")
-      label(for="password") Mật khẩu
-      input(
-        type="password"
-        class="form-control"
-        name="password"
-        id="password"
-      )
-    
-    div(class="form-group")
+      a(
+        href=`/user/info/change-password`
+        class="btn btn-primary"
+      ) Đổi mật khẩu
+
       button(
         type="submit"
         class="btn btn-primary"
