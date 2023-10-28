@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('express-flash');
 const moment = require('moment');
+const http = require('http');
+const { Server } = require("socket.io");
 
 require("dotenv").config();
 
@@ -19,6 +21,12 @@ const route = require('./routes/client/index.route'); // giữ phím ctrl + clic
 
 const app = express();
 const port = parseInt(process.env.PORT) || 3000
+
+//socket.io
+const server = http.createServer(app);
+const io = new Server(server);
+global._io = io;
+//End socket.io
 
 //Nhúng flash : Dùng để hiện thị thông báo
 app.use(cookieParser('maianh20'));
@@ -57,7 +65,7 @@ app.get("*", (req, res) => {
     })
 })
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log("App listening on port : " + port);
 })
 
