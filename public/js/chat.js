@@ -63,3 +63,16 @@ if (icon) {
   })
 }
 //End Icon
+
+//Typing
+const input = formSendData.querySelector("[name='content']");
+if (input) {
+  input.addEventListener("keyup", (e) => {
+    socket.emit("CLIENT_SEND_TYPING", "show");
+  })
+}
+
+socket.on("SERVER_RETURN_TYPING", (user) => {
+  console.log(user);
+})
+//End Typing
