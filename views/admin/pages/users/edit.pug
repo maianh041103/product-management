@@ -1,0 +1,88 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main 
+  if(user.permissions.includes("user_edit"))
+    +alert-success(5000)
+    +alert-error(5000)
+    h1(class="mb-4") Cập nhật thông tin cá nhân
+
+    form(
+      action = `${prefixAdmin}/users/edit/${userAccount.id}?_method=PATCH`
+      method="POST"
+      enctype="multipart/form-data"
+    )
+      
+      div(
+        class="form-group"
+        upload-image
+      )
+        label(for="avatar") Ảnh
+        input(
+            type="file"
+            class="form-control-file"
+            id="avatar"
+            name="avatar"
+            accept="image/*"
+            upload-image-input
+        )
+        img(
+            src=userAccount.avatar
+            upload-image-preview
+            class="image-preview"
+            style="width:100px"
+        )
+        button(
+            delete-image
+            class="btn btn-danger"
+        ) x
+
+      div(class="form-group")
+        label(for="fullName") Họ tên: 
+        input(
+          type="text"
+          name="fullName"
+          id="fullName"
+          required 
+          class="form-control"
+          value=userAccount.fullName
+          )
+      
+      div(class="form-group")
+        label(for="email") Email: 
+        input(
+          type="email"
+          class="form-control"
+          name="email"
+          id="email"
+          value=userAccount.email
+        )
+      
+      div(class="form-group")
+        label(for="password") Mật khẩu: 
+        input(
+          type="password"
+          class="form-control"
+          name="password"
+          id="password"
+          value=userAccount.password
+        )
+
+      
+      div(class="form-group")
+        label(for="phone") Số điện thoại: 
+        input(
+          type="phone"
+          class="form-control"
+          name="phone"
+          id="phone"
+          value=userAccount.phone
+        )
+        
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-primary"
+        ) Cập nhật
+  else 
+    h1 Bạn không có quyền truy cập trang web này

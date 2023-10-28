@@ -7,9 +7,35 @@ block main
   form(
     action = `/user/info/edit?_method=PATCH`
     method="POST"
+    enctype="multipart/form-data"
   )
+    
+    div(
+      class="form-group"
+      upload-image
+    )
+      label(for="avatar") Ảnh
+      input(
+          type="file"
+          class="form-control-file"
+          id="avatar"
+          name="avatar"
+          accept="image/*"
+          upload-image-input
+      )
+      img(
+          src=user.avatar
+          upload-image-preview
+          class="image-preview"
+          style="width:100px"
+      )
+      button(
+          delete-image
+          class="btn btn-danger"
+      ) x
+
     div(class="form-group")
-      label(for="fullName") Họ tên *: 
+      label(for="fullName") Họ tên: 
       input(
         type="text"
         name="fullName"
@@ -20,7 +46,7 @@ block main
         )
     
     div(class="form-group")
-      label(for="email") Email *: 
+      label(for="email") Email: 
       input(
         type="email"
         class="form-control"
@@ -28,6 +54,17 @@ block main
         id="email"
         value=user.email
       )
+    
+    div(class="form-group")
+      label(for="phone") Số điện thoại: 
+      input(
+        type="phone"
+        class="form-control"
+        name="phone"
+        id="phone"
+        value=user.phone
+      )
+
        
     div(class="form-group")
       a(

@@ -1,0 +1,115 @@
+extends ../../layouts/default
+include ../../mixins/alert
+include ../../mixins/moment.pug
+
+block main 
+  if(user.permissions.includes("user_view"))
+    +alert-success(5000)
+    +alert-error(5000)
+    h1(class="mb-4") Tài khoản khách hàng
+    .card.mb-3
+      .card-header Danh sách
+      .card-body 
+        .row 
+        table(
+          class="table table-hover table-sm"
+        )
+          thead
+            tr 
+              th STT 
+              th Avatar 
+              th Họ tên
+              th Email 
+              th Số điện thoại
+              th Trạng thái
+              th Người sửa
+              th Hành động
+          tbody 
+            if(users)
+              each accountUser,index in users 
+                tr 
+                  td #{index+1}
+                  td 
+                    if(accountUser.avatar)
+                      img(
+                        src=accountUser.avatar
+                        alt=accountUser.fullName
+                        width="100px"
+                        height="auto"
+                      )
+                    else 
+                      img(
+                        src=`/images/th.jpg`
+                        alt="Ảnh đại diện"
+                        width="50px"
+                        class="mb-4"
+                      )
+                  td #{accountUser.fullName}
+                  td #{accountUser.email}
+                  td #{accountUser.phone}
+                  td 
+                    if(user.permissions.includes("user_edit"))
+                      if(accountUser.status == "active")
+                        a(
+                          href="javascript:;" 
+                          class="badge text-bg-success"
+                          data-status=accountUser.status
+                          data-id=accountUser.id
+                          ) Hoạt động
+                      else
+                        a(
+                          href="javascript:;" 
+                          class="badge text-bg-danger"
+                          data-status=accountUser.status
+                          data-id=accountUser.id
+                          ) Dừng hoạt động
+                    else 
+                      if(accountUser.status == "active")
+                        span(
+                          class="badge text-bg-success"
+                          ) Hoạt động 
+                      else
+                        span(
+                          class="badge text-bg-danger"
+                          ) Dừng hoạt động
+                  td
+                    if(accountUser.updatedBy.length>0)
+                      p #{accountUser.updatedBy[accountUser.updatedBy.length-1].fullName}
+                      +formatDate(accountUser.updatedBy.updatedAt)
+                  td 
+                    a(
+                      class="btn btn-secondary btn-sm"
+                      href=`${prefixAdmin}/users/detail/${accountUser.id}`
+                    ) Chi tiết
+                    if(user.permissions.includes("user_edit"))
+                      a(
+                        class="btn btn-warning btn-sm"
+                        href=`${prefixAdmin}/users/edit/${accountUser.id}`
+                      ) Sửa
+                    if(user.permissions.includes("user_delete"))
+                      button(
+                        class="btn btn-danger btn-sm ml-1"
+                        button-delete
+                        data-id=accountUser.id
+                      ) Xóa
+
+              form(
+                action=""
+                method="POST"
+                id="form-change-status"
+                path=`${prefixAdmin}/users/change-status`
+              )
+
+              form(
+                action=""
+                method="POST"
+                id="form-delete-item"
+                path=`${prefixAdmin}/users/delete/`
+              )
+            else
+              tr
+                td(colspan="4" class="text-center") Chưa có tài khoản nào được tạo
+  else 
+    h1 Bạn không có quyền vào trang này     
+  script(src="/admin/js/product.js") 
+

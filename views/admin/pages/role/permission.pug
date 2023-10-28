@@ -140,6 +140,26 @@ block main
             each item in roles
               td(class="text-center")
                 input(type="checkbox")
+        
+          //- User
+          tr
+            td(colspan="4")
+              b Khách hàng
+          tr(data-name="user_view")
+            td Xem
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="user_edit")
+            td Chỉnh sửa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="user_delete")
+            td Xóa
+            each item in roles
+              td(class="text-center")
+                input(type="checkbox")
 
           //- Danh mục bài viết
           tr

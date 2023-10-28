@@ -3,6 +3,9 @@ const route = express.Router();
 const controller = require('../../controller/client/user.controller');
 const userValidate = require('../../validates/client/user.validate');
 const authMiddlerware = require('../../middlewares/client/auth.middlerware');
+const multer = require('multer')
+const fileUpload = multer();
+const uploadClound = require('../../middlewares/admin/uploadClound.middleware');
 
 route.get('/register', controller.register);
 
@@ -30,7 +33,7 @@ route.get('/info', authMiddlerware.requireAuth, controller.info);
 
 route.get('/info/edit', authMiddlerware.requireAuth, controller.infoEdit);
 
-route.patch('/info/edit', controller.infoEditPATCH);
+route.patch('/info/edit', fileUpload.single('avatar'), uploadClound.uploadClound, controller.infoEditPATCH);
 
 route.get('/info/change-password', controller.changePassword);
 
