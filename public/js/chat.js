@@ -69,13 +69,21 @@ if (buttonIcon) {
   })
 }
 
+var index;
+const input = formSendData.querySelector("[name='content']");
+
+input.addEventListener("click", (e) => {
+  index = e.target.selectionStart;
+  console.log(index);
+})
+
 const icon = document.querySelector("emoji-picker");
 if (icon) {
   icon.addEventListener("emoji-click", (e) => {
     const iconValue = e.detail.unicode;
-    const input = formSendData.querySelector("[name='content']");
-    input.value = input.value + iconValue;
-    input.setSelectionRange(input.value.length, input.value.length);
+    input.value = input.value.slice(0, index) + iconValue + input.value.slice(index, input.value.length);
+    index += 2;
+    input.setSelectionRange(index, index);
     input.focus();
     sendTyping();
   })
@@ -84,9 +92,9 @@ if (icon) {
 //End Icon
 
 //Typing
-const input = formSendData.querySelector("[name='content']");
 if (input) {
   input.addEventListener("keyup", (e) => {
+    index = input.value.length;
     sendTyping();
   })
 }
