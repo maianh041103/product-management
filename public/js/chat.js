@@ -9,6 +9,7 @@ if (formSendData) {
     const content = input.value;
     if (content) {
       socket.emit("CLIENT_SEND_MESSAGE", content);
+      socket.emit("CLIENT_SEND_TYPING", "hidden");
       input.value = "";
     }
   })
@@ -17,6 +18,7 @@ if (formSendData) {
 
 //Socket.io
 socket.on("SERVER_RETURN_MESSAGE", (data) => {
+  const elementListTyping = document.querySelector(".chat .inner-list-typing");
   const body = document.querySelector(".chat .inner-body");
   const myId = document.querySelector("[my-id]");
   const userId = myId.getAttribute('my-id');
@@ -31,7 +33,7 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
   div.innerHTML = `${userName}
   <div class="inner-content">${data.content}</div>
   `;
-  body.appendChild(div);
+  body.insertBefore(div, elementListTyping)
 
   bodyChat.scrollTop = bodyChat.scrollHeight;
 })
@@ -43,6 +45,19 @@ if (bodyChat) {
   bodyChat.scrollTop = bodyChat.scrollHeight;
 }
 //End Scoll chat to bottom
+
+//Function CLIENT_SEND_TYPING
+var removeTimeout;
+const sendTyping = () => {
+  socket.emit("CLIENT_SEND_TYPING", "show");
+
+  clearTimeout(removeTimeout);
+
+  removeTimeout = setTimeout(() => {
+    socket.emit("CLIENT_SEND_TYPING", "hidden");
+  }, 8000)
+}
+//ENd Function CLIENT_SEND_TYPING
 
 //Icon
 const buttonIcon = document.querySelector(".button-icon");
@@ -60,7 +75,11 @@ if (icon) {
     const iconValue = e.detail.unicode;
     const input = formSendData.querySelector("[name='content']");
     input.value = input.value + iconValue;
+    input.setSelectionRange(input.value.length, input.value.length);
+    input.focus();
+    sendTyping();
   })
+
 }
 //End Icon
 
@@ -68,11 +87,38 @@ if (icon) {
 const input = formSendData.querySelector("[name='content']");
 if (input) {
   input.addEventListener("keyup", (e) => {
-    socket.emit("CLIENT_SEND_TYPING", "show");
+    sendTyping();
   })
 }
 
-socket.on("SERVER_RETURN_TYPING", (user) => {
-  console.log(user);
-})
+const elementListTyping = document.querySelector(".chat .inner-list-typing");
+if (elementListTyping) {
+  socket.on("SERVER_RETURN_TYPING", (user) => {
+    if (user.type == "show") {
+      const boxTypingExists = elementListTyping.querySelector("[data-id]");
+      if (!boxTypingExists) {
+        const div = document.createElement("div");
+        div.classList.add("box-typing");
+        div.setAttribute("data-id", user.userId);
+        div.innerHTML = `
+        <div class="inner-name">${user.fullName}</div>
+        <div class="inner-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      `
+        elementListTyping.appendChild(div);
+        const body = document.querySelector(".chat .inner-body");
+        body.scrollTop = body.scrollHeight;
+
+      }
+    } else {
+      const boxTypingExists = elementListTyping.querySelector("[data-id]");
+      if (boxTypingExists) {
+        elementListTyping.removeChild(boxTypingExists);
+      }
+    }
+  })
+}
 //End Typing
