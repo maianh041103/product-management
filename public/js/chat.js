@@ -62,6 +62,8 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
   body.insertBefore(div, elementListTyping)
 
   bodyChat.scrollTop = bodyChat.scrollHeight;
+
+  const gallery = new Viewer(div);
 })
 //End Socket.io
 
@@ -156,3 +158,9 @@ if (elementListTyping) {
   })
 }
 //End Typing
+
+//Full screen image 
+const bodyChatPreviewImage = document.querySelector(".chat .inner-body");
+console.log(bodyChatPreviewImage);
+const gallery = new Viewer(bodyChatPreviewImage);
+//End full screen image
