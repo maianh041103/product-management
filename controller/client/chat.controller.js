@@ -1,5 +1,6 @@
 const Chat = require('../../models/chat.model');
 const User = require('../../models/user.model');
+const uploadImagesToClound = require('../../helpers/uploadImagesToClound');
 
 //[GET] /chat/
 module.exports.index = async (req, res) => {
@@ -8,10 +9,17 @@ module.exports.index = async (req, res) => {
 
   //socket.io
   _io.once("connection", (socket) => {
-    socket.on("CLIENT_SEND_MESSAGE", async (content) => {
+    socket.on("CLIENT_SEND_MESSAGE", async (result) => {
+      let images = [];
+      for (const image of result.images) {
+        const link = await uploadImagesToClound(image);
+        images.push(link);
+      }
+
       const chat = new Chat({
         user_id: userId,
-        content: content
+        content: result.content,
+        images: images
       });
       await chat.save();
 
@@ -19,8 +27,10 @@ module.exports.index = async (req, res) => {
       const data = {
         user_id: userId,
         fullName: fullName,
-        content: content
+        content: result.content,
+        images: images
       }
+      console.log(data);
       _io.emit("SERVER_RETURN_MESSAGE", data);
     })
 
