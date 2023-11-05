@@ -28,6 +28,14 @@ const userSchema = new mongoose.Schema({
     updatedAt: Date
   }],
   deleteAt: Date,
+  requestFriends: Array, //Lời mời đã gửi
+  acceptFriends: Array, //Lời mời đã nhận
+  friendList: [
+    {
+      user_id: String,
+      room_id: String
+    }
+  ]
 },
   {
     timestamps: true
