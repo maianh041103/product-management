@@ -7,7 +7,7 @@ block main
 
     .row 
       .col-12 
-        +box-head("Danh sách lời mời đã gửi")
+        +box-head("Danh sách lời mời kết bạn")
 
     .row 
       if(users)
@@ -35,7 +35,14 @@ block main
                   button(
                     class="btn btn-sm btn-secondary mr-1"
                     btn-deleted-friend=user.id
+                    disabled
                   ) Đã xóa
+
+                  button(
+                  class="btn btn-sm btn-primary mr-1"
+                  btn-accepted-friend
+                  disabled
+                ) Đã chấp nhận
         
 block script 
   script(src="/js/users.js")
