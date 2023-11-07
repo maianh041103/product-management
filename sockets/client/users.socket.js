@@ -47,6 +47,15 @@ module.exports = async (res) => {
         acceptFriendLength: acceptFriendLength,
         userId: userId
       });
+
+      const userA = await User.findOne({
+        _id: myUserId
+      }).select("id fullName avatar");
+
+      socket.broadcast.emit("SERVER_RETURN_INFO_ACCEPT_FRIEND", {
+        userA: userA,
+        userId: userId
+      });
     })
 
     //A hủy gửi yêu cầu kết bạn với B

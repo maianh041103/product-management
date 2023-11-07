@@ -9,7 +9,7 @@ block main
       .col-12 
         +box-head("Danh sách lời mời kết bạn")
 
-    .row 
+    .row(data-users-accept=user.id)
       if(users)
         each user in users 
           .col-6 
