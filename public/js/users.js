@@ -80,6 +80,7 @@ if (dataUsersAccept) {
     const user = data.userA;
     const div = document.createElement("div");
     div.classList.add("col-6");
+    div.setAttribute("data-user-id", user._id);
 
     div.innerHTML = `
     <div class="box-user">
@@ -100,7 +101,6 @@ if (dataUsersAccept) {
     const userId = dataUsersAccept.getAttribute("data-users-accept");
 
     if (userId == data.userId) {
-      console.log("test");
       dataUsersAccept.appendChild(div);
     }
 
@@ -110,3 +110,18 @@ if (dataUsersAccept) {
     acceptFriend(btnAcceptFriend);
   })
 }
+
+//End A gửi lời mời cập nhật thông tin A vào danh sách accept của B
+
+//A hủy gửi yêu cầu kết bạn thì xóa A ra khỏi danh sách accept của B
+socket.on("SERVER_RETURN_CANCEL_REQUEST_FRIEND", (data) => {
+  const boxUserRemove = document.querySelector(`[data-user-id='${data.user._id}']`);
+  if (boxUserRemove) {
+    const dataUsersAccept = document.querySelector("[data-users-accept]");
+    const userId = dataUsersAccept.getAttribute("data-users-accept");
+    if (userId === data.userId) {
+      dataUsersAccept.removeChild(boxUserRemove);
+    }
+  }
+})
+//End A hủy gửi yêu cầu kết bạn thì xóa A ra khỏi danh sách accept của B

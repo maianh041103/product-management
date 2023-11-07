@@ -50,7 +50,7 @@ module.exports = async (res) => {
 
       const userA = await User.findOne({
         _id: myUserId
-      }).select("id fullName avatar");
+      }).select("id fullName avatar acceptFriends");
 
       socket.broadcast.emit("SERVER_RETURN_INFO_ACCEPT_FRIEND", {
         userA: userA,
@@ -101,8 +101,21 @@ module.exports = async (res) => {
         userId: userId
       });
 
+      const userA = await User.findOne({
+        _id: myUserId
+      }).select("id fullName avatar acceptFriends");
+
+      socket.broadcast.emit("SERVER_RETURN_CANCEL_REQUEST_FRIEND", {
+        user: userA,
+        userId: userId
+      })
+
     })
     //End A hủy gửi yêu cầu kết bạn với B
+
+
+
+
 
     //B xóa lời mời kết bạn của A
     socket.on("CLIENT_REFUSE_FRIEND", async (userId) => {
