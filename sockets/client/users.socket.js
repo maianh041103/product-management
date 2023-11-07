@@ -35,7 +35,34 @@ module.exports = async (res) => {
           $push: { acceptFriends: myUserId }
         });
       }
+
+      //Tìm độ dài mảng acceptFriends của B
+      const userB = await User.findOne({
+        _id: userId
+      }).select("acceptFriends");
+
+      const acceptFriendLength = userB.acceptFriends.length;
+
+      socket.broadcast.emit("SERVER_RETURN_ACCEPT_LENGTH", {
+        acceptFriendLength: acceptFriendLength,
+        userId: userId
+      });
     })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     //A hủy gửi yêu cầu kết bạn với B

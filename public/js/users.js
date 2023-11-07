@@ -49,3 +49,14 @@ if (btnAcceptFriend.length) {
   }
 }
 //End chấp nhận lời mời kết bạn
+
+//A gửi lời mời cập nhật số lượng lời mời bên B
+const badgeUsersAccept = document.querySelector("[badge-users-accept]");
+if (badgeUsersAccept) {
+  socket.on("SERVER_RETURN_ACCEPT_LENGTH", (data) => {
+    if (badgeUsersAccept.getAttribute("badge-users-accept") == data.userId) {
+      badgeUsersAccept.innerHTML = parseInt(data.acceptFriendLength);
+    }
+  })
+}
+//End A gửi lời mời cập nhật số lượng lời mời bên B
