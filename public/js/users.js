@@ -125,3 +125,15 @@ socket.on("SERVER_RETURN_CANCEL_REQUEST_FRIEND", (data) => {
   }
 })
 //End A hủy gửi yêu cầu kết bạn thì xóa A ra khỏi danh sách accept của B
+
+//A gửi lời mời cho B thì xóa A ra khỏi danh sách người dùng của B
+const pageNotFriend = document.querySelector("[page-not-friend]");
+if (pageNotFriend) {
+  socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND", (data) => {
+    const userNotFriend = document.querySelector(`[user-not-friend='${data.userA._id}']`);
+    if (userNotFriend) {
+      pageNotFriend.removeChild(userNotFriend);
+    }
+  })
+}
+//End A gửi lời mời cho B thì xóa A ra khỏi danh sách người dùng của B

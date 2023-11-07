@@ -9,10 +9,10 @@ block main
       .col-12 
         +box-head("Danh sách người dùng")
 
-    .row 
+    .row(page-not-friend=user.id)
       if(users)
         each user in users 
-          .col-6 
+          .col-6(user-not-friend=user.id)
             div(class="box-user")
               div(class="inner-avatar")
                 img(
