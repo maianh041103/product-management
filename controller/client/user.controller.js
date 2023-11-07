@@ -69,11 +69,14 @@ module.exports.loginPOST = async (req, res) => {
     await Cart.updateOne({ _id: req.cookies.cartId }, { user_id: emailExist.id });
   }
 
+  await User.updateOne({ tokenUser: req.cookies.tokenUser }, { statusOnline: "online" });
+
   res.redirect('/');
 }
 
 //[GET] /user/logout
 module.exports.logout = async (req, res) => {
+  await User.updateOne({ tokenUser: req.cookies.tokenUser }, { statusOnline: "offline" });
   res.clearCookie("tokenUser");
   res.clearCookie("cartId");
   res.redirect("/user/login");

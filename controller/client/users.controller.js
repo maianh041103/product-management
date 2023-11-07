@@ -5,6 +5,10 @@ const socketUsers = require('../../sockets/client/users.socket');
 module.exports.notFriend = async (req, res) => {
   const userId = res.locals.user.id;
 
+  const friendListId = res.locals.user.friendList.map(item => {
+    return item.user_id;
+  })
+
   socketUsers(res);
   const user = await User.findOne({
     _id: userId
@@ -14,7 +18,8 @@ module.exports.notFriend = async (req, res) => {
     $and: [
       { _id: { $ne: userId } },
       { _id: { $nin: user.requestFriends } },
-      { _id: { $nin: user.acceptFriends } }
+      { _id: { $nin: user.acceptFriends } },
+      { _id: { $nin: friendListId } },
     ],
     deleted: false,
     status: "active"
@@ -57,6 +62,22 @@ module.exports.acceptFriend = async (req, res) => {
 
   res.render("client/pages/users/accept-friend", {
     pageTitle: "Lời mời đã nhận",
+    users: users
+  })
+}
+
+//[GET] /users/friends
+module.exports.friends = async (req, res) => {
+  const friendListId = res.locals.user.friendList.map(item => {
+    return item.user_id;
+  })
+  const users = await User.find({
+    _id: { $in: friendListId },
+    status: "active",
+    deleted: false
+  });
+  res.render("client/pages/users/friends", {
+    pageTitle: "Danh sách bạn bè",
     users: users
   })
 }

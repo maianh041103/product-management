@@ -8,4 +8,6 @@ route.get('/request', controller.requestFriend);
 
 route.get('/accept', controller.acceptFriend);
 
+route.get('/friends', controller.friends);
+
 module.exports = route;

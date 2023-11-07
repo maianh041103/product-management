@@ -35,7 +35,8 @@ const userSchema = new mongoose.Schema({
       user_id: String,
       room_id: String
     }
-  ]
+  ],
+  statusOnline: String
 },
   {
     timestamps: true
