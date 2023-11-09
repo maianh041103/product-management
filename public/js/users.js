@@ -137,3 +137,14 @@ if (pageNotFriend) {
   })
 }
 //End A gửi lời mời cho B thì xóa A ra khỏi danh sách người dùng của B
+
+//Cập nhật A online cho B
+socket.on("SERVER_RETURN_USER_STATUS_ONLINE", async (data) => {
+  const dataUserFriend = document.querySelector(`[data-users-friend]`);
+  if (dataUserFriend) {
+    const boxUser = dataUserFriend.querySelector(`[user-id='${data.user._id}']`);
+    if (boxUser) {
+      boxUser.querySelector("[status]").setAttribute("status", data.status);
+    }
+  }
+})

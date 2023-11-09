@@ -69,7 +69,13 @@ module.exports.loginPOST = async (req, res) => {
     await Cart.updateOne({ _id: req.cookies.cartId }, { user_id: emailExist.id });
   }
 
-  await User.updateOne({ tokenUser: req.cookies.tokenUser }, { statusOnline: "online" });
+  await User.updateOne({ tokenUser: emailExist.tokenUser }, { statusOnline: "online" });
+  _io.once("connection", (socket) => {
+    socket.broadcast.emit("SERVER_RETURN_USER_STATUS_ONLINE", {
+      user: emailExist,
+      status: "online"
+    });
+  })
 
   res.redirect('/');
 }
@@ -77,6 +83,16 @@ module.exports.loginPOST = async (req, res) => {
 //[GET] /user/logout
 module.exports.logout = async (req, res) => {
   await User.updateOne({ tokenUser: req.cookies.tokenUser }, { statusOnline: "offline" });
+
+  const user = await User.findOne({ tokenUser: req.cookies.tokenUser });
+
+  _io.once("connection", (socket) => {
+    socket.broadcast.emit("SERVER_RETURN_USER_STATUS_ONLINE", {
+      user: user,
+      status: "offline"
+    });
+  })
+
   res.clearCookie("tokenUser");
   res.clearCookie("cartId");
   res.redirect("/user/login");
