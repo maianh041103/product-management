@@ -76,6 +76,13 @@ module.exports.friends = async (req, res) => {
     status: "active",
     deleted: false
   });
+
+  for (const user of users) {
+    //Với user trong friendList của A, thêm room_id của user đó với A vào user
+    const infoFriend = await user.friendList.find(friend => friend.user_id == res.locals.user.id);
+    user.infoFriend = infoFriend;
+
+  }
   res.render("client/pages/users/friends", {
     pageTitle: "Danh sách bạn bè",
     users: users

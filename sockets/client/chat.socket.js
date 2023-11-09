@@ -1,11 +1,13 @@
 const uploadImagesToClound = require('../../helpers/uploadImagesToClound');
 const Chat = require('../../models/chat.model');
 
-module.exports = (res) => {
+module.exports = (req, res) => {
   const userId = res.locals.user._id;
   const fullName = res.locals.user.fullName;
+  const roomId = req.params.roomId;
 
   _io.once("connection", (socket) => {
+    socket.join(roomId);
     socket.on("CLIENT_SEND_MESSAGE", async (result) => {
       let images = [];
       for (const image of result.images) {
@@ -16,7 +18,8 @@ module.exports = (res) => {
       const chat = new Chat({
         user_id: userId,
         content: result.content,
-        images: images
+        images: images,
+        room_chat_id: req.params.roomId
       });
       await chat.save();
 
@@ -27,7 +30,7 @@ module.exports = (res) => {
         content: result.content,
         images: images
       }
-      _io.emit("SERVER_RETURN_MESSAGE", data);
+      _io.to(roomId).emit("SERVER_RETURN_MESSAGE", data);
     })
 
     //send typing
@@ -37,7 +40,7 @@ module.exports = (res) => {
         fullName: fullName,
         type: type
       }
-      socket.broadcast.emit("SERVER_RETURN_TYPING", userInfo)
+      socket.broadcast.to(roomId).emit("SERVER_RETURN_TYPING", userInfo)
     })
   })
 }
